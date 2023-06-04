@@ -84,7 +84,45 @@ public class Tree
         }   
     }
 
-    public void PrintMap()
+    public void PrintMapArr(int[,] mapArr)
+    {
+        for (int y = 0; y < DungeonHeight; y++)
+        {
+            for (int x = 0; x < DungeonWidth; x++)
+            {
+                int v = mapArr[x, y];
+                Console.Write(v);
+            }
+            Console.WriteLine();
+        }
+    }
+
+    public int[,] MakeMapArr(List<Area> areaList)
+    {
+        int[,] mapArr = new int[DungeonWidth, DungeonHeight];
+
+        Console.WriteLine("Size of arr: " + mapArr.Length);
+
+        Area currentArea;
+        
+        for (int i = 0; i < areaList.Count; i++)
+        {
+            currentArea = areaList[i];
+
+            for (int y = 0; y < currentArea.H; y++)
+            {
+                for (int x = 0; x < currentArea.W; x++)
+                {
+                    mapArr[currentArea.X + x, currentArea.Y + y] = 1;
+                }
+            }
+        }
+
+        return mapArr;
+    }
+    
+    // Prints the incomplete version of the map, which indicates the numbered binary partitions.
+    public void PrintPartitionsMap()
     {
         int[,] mapArr = new int[DungeonWidth, DungeonHeight];
 
@@ -104,22 +142,50 @@ public class Tree
                 for (int x = 0; x < currentArea.W; x++)
                 {
                     mapArr[currentArea.X + x, currentArea.Y + y] = i;
-                    Console.WriteLine("Set {0}, {1} to {2}", x, y, i);
                 }
             }
         }
 
-        Console.WriteLine(mapArr[2, 2]);
-        
-        for (int y = 0; y < DungeonHeight; y++)
+        PrintMapArr(mapArr);
+    }
+    
+    // Takes a fully partitioned list of nodes with areas and put a room in each one.
+    // Returns a list of Areas describing rooms. Essentially randomly carves out a room within
+    // the bounds of each Area given by the Data members of nodes in the node list.
+    public List<Area> CreateRooms(List<TreeNode> leafNodesList)
+    {
+        List<Area> roomList = new List<Area>();
+
+        TreeNode currentNode;
+        Area currentArea;
+        // For each node in the node list:
+        for (int i = 0; i < leafNodesList.Count; i++)
         {
-            for (int x = 0; x < DungeonWidth; x++)
-            {
-                int v = mapArr[x, y];
-                Console.Write(v);
-            }
-            Console.WriteLine();
+            // Get current Area.
+            currentNode = leafNodesList[i];
+            currentArea = currentNode.Data;
+            
+            // Pick a random x and y offset, both within width/2 and height/2.
+            int xOffset = _random.Next(0, currentArea.W / 2);
+            int yOffset = _random.Next(0, currentArea.H / 2);
+            
+            // Determine right and upper bounds based on the selected room offsets
+            int widthBound = currentArea.W - xOffset;
+            int heightBound = currentArea.H - yOffset;
+            
+            // Select width and height within the bounds
+            int roomWidth = _random.Next(RoomMinWidth, widthBound);
+            int roomHeight = _random.Next(RoomMinWidth, heightBound);
+
+            Area newRoom = new Area(
+                currentArea.X + xOffset,
+                currentArea.Y + yOffset,
+                roomWidth,
+                roomHeight);
+            roomList.Add(newRoom);
+            
         }
+        return roomList;
     }
     
     // Split `node` into exact halves along a vertical line. No random generation of room dimensions.
@@ -153,61 +219,6 @@ public class Tree
         newRChild.Data = bottomHalf;
     }
     
-    private void SplitVertically(TreeNode node, TreeNode newLChild, TreeNode newRChild)
-    {
-        // choose a random position (x for vertical)
-        int minSplit = node.Data.X + SplitMargin;
-        Console.WriteLine("minSplit: " + minSplit);
-        int maxSplit = node.Data.X + node.Data.W - SplitMargin;
-        Console.WriteLine("maxSplit: " + maxSplit);
-
-        int splitPosition = (minSplit + ((maxSplit - minSplit) / 2));
-        while (((double)splitPosition < SplitMinRatio) ||
-               ((double)splitPosition / (node.Data.W - SplitMargin) > SplitMaxRatio))
-        {
-            splitPosition = _random.Next(RoomMinWidth, node.Data.W - SplitMargin);
-        }
-
-        Console.WriteLine("Split position: " + splitPosition);
-        int maxLeftWidth = splitPosition - SplitMargin - 1;
-        Console.WriteLine("maxLeftWidth: " + maxLeftWidth);
-        int maxRightWidth = maxSplit - splitPosition;
-        Console.WriteLine("maxRightWidth: " + maxRightWidth);
-
-
-
-        int leftWidth = 0;
-        Console.WriteLine("Computing left width");
-        while (((double)leftWidth / maxLeftWidth < SplitMinRatio) ||
-               (((double)leftWidth / maxRightWidth) > SplitMaxRatio))
-        {
-            Console.WriteLine("About to get random between " + RoomMinWidth + " and " + maxLeftWidth);
-            if (RoomMinWidth > maxLeftWidth)
-            {
-                Console.WriteLine("Can't make this room");
-                return;
-            }
-
-            leftWidth = _random.Next(RoomMinWidth, maxLeftWidth);
-            Console.WriteLine("leftWidth random genned to " + leftWidth);
-        }
-
-        int rightWidth = _random.Next(RoomMinWidth, maxRightWidth);
-        Console.WriteLine("Computing right width");
-        while (((double)rightWidth / maxRightWidth < SplitMinRatio) ||
-               (((double)rightWidth / maxRightWidth) > SplitMaxRatio))
-        {
-            Console.WriteLine("About to get random between " + RoomMinWidth + " and " + maxRightWidth);
-            if (RoomMinWidth > maxRightWidth)
-            {
-                Console.WriteLine("Can't make this room");
-            }
-
-            rightWidth = _random.Next(RoomMinWidth, maxRightWidth);
-            Console.WriteLine("rightWidth random genned to " + rightWidth);
-        }
-    }
-
     private static void PrintGoodStuff(List<TreeNode> nodeList)
     {
         Console.WriteLine("========= Current Leaf Nodes ==============");
@@ -236,12 +247,13 @@ public class Tree
         tree.SplitAll();
         var li4 = tree.GetLeafNodes();
         PrintGoodStuff(li4);
-        
         /*
         tree.SplitAll();
         var li5 = tree.GetLeafNodes();
         PrintGoodStuff(li5);
         */
-        tree.PrintMap();
+        tree.PrintPartitionsMap();
+        Console.WriteLine("......");
+        tree.PrintMapArr(tree.MakeMapArr(tree.CreateRooms(tree.GetLeafNodes())));
     }
 }
