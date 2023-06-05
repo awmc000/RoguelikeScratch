@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEngine;
+#endif
 using Random = System.Random;
 
 public class Tree
@@ -15,6 +18,8 @@ public class Tree
 
     private const int RoomMinWidth  = 3;
     private const int RoomMinHeight = 3;
+
+    private const int CorridorWidth = 1;
 
     private Random _random = new Random();
     
@@ -91,7 +96,15 @@ public class Tree
             for (int x = 0; x < DungeonWidth; x++)
             {
                 int v = mapArr[x, y];
-                Console.Write(v);
+                switch (v)
+                {
+                    case 0:
+                        Console.Write('█');
+                        break;
+                    case 1:
+                        Console.Write('.');
+                        break;
+                }
             }
             Console.WriteLine();
         }
@@ -166,16 +179,16 @@ public class Tree
             currentArea = currentNode.Data;
             
             // Pick a random x and y offset, both within width/2 and height/2.
-            int xOffset = _random.Next(0, currentArea.W / 2);
-            int yOffset = _random.Next(0, currentArea.H / 2);
+            int xOffset = _random.Next(1, currentArea.W / 2);
+            int yOffset = _random.Next(1, currentArea.H / 2);
             
             // Determine right and upper bounds based on the selected room offsets
             int widthBound = currentArea.W - xOffset;
             int heightBound = currentArea.H - yOffset;
             
             // Select width and height within the bounds
-            int roomWidth = _random.Next(RoomMinWidth, widthBound);
-            int roomHeight = _random.Next(RoomMinWidth, heightBound);
+            int roomWidth = _random.Next((int) (widthBound * SplitMinRatio), widthBound);
+            int roomHeight = _random.Next((int) (heightBound * SplitMinRatio), heightBound);
 
             Area newRoom = new Area(
                 currentArea.X + xOffset,
@@ -187,7 +200,70 @@ public class Tree
         }
         return roomList;
     }
-    
+    // Takes a list of rooms and adds to the list a series of corridors between rooms.
+    public List<Area> CreateCorridors(List<Area> roomList)
+    {
+        // Lazy algorithm: Iterates over the list, connecting A to B, B to C, and C to D.
+        Area roomA, roomB;
+        Area pointA, pointB;
+        List<Area> corridors = new List<Area>(); // added at once after all are generated.
+
+        for (int i = 0; i < roomList.Count - 1; i++)
+        {
+            roomA = roomList[i];
+            roomB = roomList[i + 1];
+
+            pointA = RandPointWithin(roomA);
+            pointB = RandPointWithin(roomB);
+            
+            // Create a rectangular area that spans the width.
+            Area widthSpan;
+            int corridorWidth;
+            // If A is to the left of B
+            if (pointA.X < pointB.X)
+            {
+                corridorWidth = pointB.X - pointA.X;
+                widthSpan = new Area(pointA.X, pointA.Y, corridorWidth, CorridorWidth);
+            }
+            // If B is to the left of A
+            else //if (pointB.X < pointA.X)
+            {
+                corridorWidth = pointA.X - pointB.X;
+                widthSpan = new Area(pointB.X, pointB.Y, corridorWidth, CorridorWidth);
+            }
+            corridors.Add(widthSpan);
+            
+            // Create a rectangular area that spans the height.
+            Area heightSpan;
+            int corridorHeight;
+            // If A is above B
+            if (pointA.Y < pointB.Y)
+            {
+                corridorHeight = pointB.Y - pointA.Y;
+                heightSpan = new Area(pointA.X , pointA.Y, CorridorWidth, corridorHeight);
+            }
+            // If B is above A
+            else
+            {
+                corridorHeight = pointA.Y - pointB.Y;
+                heightSpan = new Area(pointB.X, pointB.Y, CorridorWidth, corridorHeight);
+            }
+            corridors.Add(heightSpan);
+        }
+
+        foreach (Area corridor in corridors)
+            roomList.Add(corridor);
+        
+        return roomList;
+    }
+
+    private Area RandPointWithin(Area room)
+    {
+        Area point = new Area(0, 0, 0, 0);
+        point.X = _random.Next(room.X, room.X + room.W);
+        point.Y = _random.Next(room.Y, room.Y + room.H);
+        return point;
+    }
     // Split `node` into exact halves along a vertical line. No random generation of room dimensions.
     private void HalveVertically(TreeNode node, TreeNode newLChild, TreeNode newRChild)
     {
@@ -218,6 +294,25 @@ public class Tree
         newLChild.Data = topHalf;
         newRChild.Data = bottomHalf;
     }
+
+    public int[,] GenerateMap()
+    {
+        // Generate rooms within the bounds of the partitioned areas
+        List<Area> roomList = CreateRooms(_leafNodes);
+        
+        // Generate corridors to attempt to sequentially connect the rooms
+        roomList = CreateCorridors(roomList);
+        
+        // Convert the rooms and corridors from a list of rooms' XYWH into a map with 0 for wall and 1 for floor
+        int[,] map = MakeMapArr(roomList);
+        
+        // TODO: Use a simple pathfinding algorithm to find unreachable areas
+        // Either add teleporters or corridors or something else entirely
+        
+        // TODO: Compute some good spots for mobs and items to be spawned, and flag them as 2 and 3?
+
+        return map;
+    }
     
     private static void PrintGoodStuff(List<TreeNode> nodeList)
     {
@@ -247,13 +342,8 @@ public class Tree
         tree.SplitAll();
         var li4 = tree.GetLeafNodes();
         PrintGoodStuff(li4);
-        /*
-        tree.SplitAll();
-        var li5 = tree.GetLeafNodes();
-        PrintGoodStuff(li5);
-        */
-        tree.PrintPartitionsMap();
+
         Console.WriteLine("......");
-        tree.PrintMapArr(tree.MakeMapArr(tree.CreateRooms(tree.GetLeafNodes())));
+        tree.PrintMapArr(tree.MakeMapArr(tree.CreateCorridors(tree.CreateRooms(tree.GetLeafNodes()))));
     }
 }
