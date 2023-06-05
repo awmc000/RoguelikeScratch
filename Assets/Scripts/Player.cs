@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     int currentHealth;
     public int attackDamage;
 
+    public AudioSource attackSound;
+
     // Setters and getters
     public int getHealth()
     {
@@ -170,6 +172,7 @@ public class Player : MonoBehaviour
         {
             Mob targetMob = gameManager.GetMobAtTile(targetPosition);
             targetMob.changeHealth(-attackDamage);
+            attackSound.PlayDelayed(0.5f);
             gameManager.eventLog.logEvent("Player hit " + targetMob.mobName + " for " + attackDamage 
                 + " damage, it now has " + targetMob.currentHealth);
             if (targetMob.currentHealth <= 0)

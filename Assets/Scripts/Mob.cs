@@ -13,6 +13,8 @@ public class Mob : MonoBehaviour
     Vector3 movementVector;
     Vector2 targetPos;
 
+    public AudioSource attackSound;
+
     public int getHealth()
     {
         return currentHealth;
@@ -94,6 +96,7 @@ public class Mob : MonoBehaviour
         if (gameManager.CanFight(this))
         {
             attackPlayer();
+            attackSound.Play();
             return;
         }
         // Second priority: Walk toward the player if they are in sight radius.
