@@ -5,36 +5,71 @@ using UnityEngine.Tilemaps;
 
 public class LevelGenerator : MonoBehaviour
 {
-    // data members
+    // Data members
     public Tilemap floorMap;
     public Tilemap wallMap;
+    
+    // floor tiles
+    /*public Tile floorTileTopLeft;
+    public Tile floorTileTopCentre;
+    public Tile floorTileTopRight;
+    
+    public Tile floorTileCentreLeft;*/
     public Tile floorTile;
-    public Tile wallTile;
+    /*public Tile floorTileCentreRight;
 
+    public Tile floorTileBottomLeft;
+    public Tile floorTileBottomCentre;
+    public Tile floorTileBottomRight;*/
+    
+    // wall tiles
+    /*public Tile wallTileTopLeft;
+    public Tile wallTileTopCentre;
+    public Tile wallTileTopRight;
+    
+    public Tile wallTileCentreLeft;*/
+    public Tile wallTile;
+    /*public Tile wallTileCentreRight;
+
+    public Tile wallTileBottomLeft;
+    public Tile wallTileBottomCentre;
+    public Tile wallTileBottomRight;*/
+    
+    // private members
+    private int[,] _mapArray;
     public void generateLevel()
     {
-        // Placeholder level gen: make a random sized room
-        int x = -10;
-        int y = -10;
-        int width = Random.Range(4, 20);
-        int height = Random.Range(4, 20); 
+        // Set up a binary tree and use it to generate the level.
+        Tree binaryTree = new Tree();
+        
+        // Get an int array from the binary tree.
+        _mapArray = binaryTree.GenerateMap();
+        
+        // Iterate over the map array
+        Vector3Int position = new Vector3Int(0, 0, 0);
+        for (int y = 0; y < Tree.DungeonHeight; y++)
+        {
+            for (int x = 0; x < Tree.DungeonWidth; x++)
+            {
+                position.x = x;
+                position.y = y;
+                switch (_mapArray[x, y])
+                {
+                    case 0: // wall
+                        wallMap.SetTile(position, wallTile);
+                        break;
+                    case 1: // floor
+                        floorMap.SetTile(position, floorTile);
+                        break;
 
+                }
+            }
+        }
+        
         // set up position vector of the bottom left point
-        Vector3Int roomPos = new Vector3Int(x, y, 0);
+        //Vector3Int roomPos = new Vector3Int(x, y, 0);
         // floors first
-        floorMap.BoxFill(roomPos, floorTile, roomPos.x, roomPos.y,
-            roomPos.x + width, roomPos.y + height);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //floorMap.BoxFill(roomPos, floorTile, roomPos.x, roomPos.y,
+        //    roomPos.x + width, roomPos.y + height);
     }
 }
