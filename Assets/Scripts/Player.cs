@@ -202,7 +202,7 @@ public class Player : MonoBehaviour
         // check if I'm dead!
         if (currentHealth <= 0)
         {
-            gameManager.gameOver();
+            gameManager.GameOver();
         }
     }
 }
