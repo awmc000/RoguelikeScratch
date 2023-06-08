@@ -45,9 +45,9 @@ public class GameManager : MonoBehaviour
 
         mobsOnScreen = FindObjectsOfType<Mob>();
 
-        eventLog.logEvent("Set up the GameManager.");
+        eventLog.logEvent("The Burrow Tale begins.");
 
-        //levelGenerator.generateLevel();
+        levelGenerator.generateLevel();
     }
 
     public bool TileFree(Transform myPos, Vector2 targetPos)
@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
         _turnsPassed++;
     }
 
-    public void gameOver()
+    public void GameOver()
     {
         eventLog.logEvent("You died!");
         Destroy(player);
