@@ -33,7 +33,7 @@ public class Mob : MonoBehaviour
     public void attackPlayer()
     {
         gameManager.HurtPlayer(1);
-        gameManager.eventLog.logEvent(mobName + " hit player for 1 damage.");
+        gameManager.eventLog.logEvent(mobName + " hit you for 1 dmg.");
     }
 
     public void moveToPlayer()
