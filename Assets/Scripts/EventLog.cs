@@ -29,7 +29,7 @@ public class EventLog : MonoBehaviour
     {
         _eventList = new List<string>();
 
-        _labelRect = new Rect(10, Screen.height - 90, 180, 320);
+        _labelRect = new Rect(10, Screen.height - 90, 180, 480);
         _labelStyle = new GUIStyle();
         _labelStyle.font = labelFont;
         _labelStyle.fontSize = 16;
