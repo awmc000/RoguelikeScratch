@@ -21,6 +21,8 @@ public class Tree
 
     private const int CorridorWidth = 1;
 
+    private const int SplitIterations = 3;
+
     private Random _random = new Random();
     
     public Tree()
@@ -297,6 +299,10 @@ public class Tree
 
     public int[,] GenerateMap()
     {
+        // Splitting 3 times gets the best results
+        for (int i = 0; i < SplitIterations; i++)
+            SplitAll();
+        
         // Generate rooms within the bounds of the partitioned areas
         List<Area> roomList = CreateRooms(_leafNodes);
         
@@ -328,22 +334,6 @@ public class Tree
     public static void Main(string[] args)
     {
         Tree tree = new Tree();
-        var li1 = tree.GetLeafNodes();
-        PrintGoodStuff(li1);
-        
-        tree.SplitAll();
-        var li2 = tree.GetLeafNodes();
-        PrintGoodStuff(li2);
-        
-        tree.SplitAll();
-        var li3 = tree.GetLeafNodes();
-        PrintGoodStuff(li3);
-        
-        tree.SplitAll();
-        var li4 = tree.GetLeafNodes();
-        PrintGoodStuff(li4);
-
-        Console.WriteLine("......");
-        tree.PrintMapArr(tree.MakeMapArr(tree.CreateCorridors(tree.CreateRooms(tree.GetLeafNodes()))));
+        tree.PrintMapArr(tree.GenerateMap());
     }
 }
