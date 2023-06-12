@@ -48,6 +48,10 @@ public class GameManager : MonoBehaviour
         eventLog.logEvent("The Burrow Tale begins.");
 
         levelGenerator.GenerateLevel();
+
+        int[] playerPos = levelGenerator.BinaryTree.GetEntitySpot();
+        Vector3 playerPosVec = new Vector3(playerPos[0], playerPos[1], 0);
+        player.transform.position = playerPosVec;
     }
 
     public bool TileFree(Transform myPos, Vector2 targetPos)
