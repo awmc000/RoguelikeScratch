@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-#if UNITY_EDITOR
-using UnityEngine;
-#endif
 using Random = System.Random;
 
 /*
