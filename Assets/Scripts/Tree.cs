@@ -16,17 +16,12 @@ using Random = System.Random;
 public class Tree
 {
     private TreeNode _root;
-    private List<TreeNode> _leafNodes;
-    private List<Area> _roomList;
+    private List<TreeNode> _leafNodes = new List<TreeNode>();
+    private List<Area> _roomList = new List<Area>();
 
     public const int DungeonWidth   = 80;
     public const int DungeonHeight  = 40;
     public const int SplitMargin    = 1;
-    public const float SplitMinRatio= 0.35f;
-    public const float SplitMaxRatio= 0.65f;
-
-    private const int RoomMinWidth  = 3;
-    private const int RoomMinHeight = 3;
 
     private const int CorridorWidth = 1;
 
@@ -41,22 +36,7 @@ public class Tree
         _leafNodes = new List<TreeNode>();
         _leafNodes.Add(_root);
     }
-
-    public TreeNode GetRoot()
-    {
-        return _root;
-    }
     
-    public void SetRoot(TreeNode root)
-    {
-        _root = root;
-    }
-
-    public List<TreeNode> GetLeafNodes()
-    {
-        return _leafNodes;
-    }
-
     // Split each leaf. Make the leafs children the new leafs.
     public void SplitAll()
     {
@@ -144,49 +124,19 @@ public class Tree
 
         return mapArr;
     }
-    
-    // Prints the incomplete version of the map, which indicates the numbered binary partitions.
-    public void PrintPartitionsMap()
-    {
-        int[,] mapArr = new int[DungeonWidth, DungeonHeight];
 
-        Console.WriteLine("Size of arr: " + mapArr.Length);
-        int numLeafNodes = _leafNodes.Count;
-
-        TreeNode currentNode;
-        Area currentArea;
-        
-        for (int i = 0; i < numLeafNodes; i++)
-        {
-            currentNode = _leafNodes[i];
-            currentArea = currentNode.Data;
-
-            for (int y = 0; y < currentArea.H; y++)
-            {
-                for (int x = 0; x < currentArea.W; x++)
-                {
-                    mapArr[currentArea.X + x, currentArea.Y + y] = i;
-                }
-            }
-        }
-
-        PrintMapArr(mapArr);
-    }
-    
     // Takes a fully partitioned list of nodes with areas and put a room in each one.
     // Returns a list of Areas describing rooms. Essentially randomly carves out a room within
     // the bounds of each Area given by the Data members of nodes in the node list.
-    public List<Area> CreateRooms(List<TreeNode> leafNodesList)
+    public void CreateRooms(List<TreeNode> leafNodesList)
     {
-        List<Area> roomList = new List<Area>();
-
         TreeNode currentNode;
         Area currentArea;
         // For each node in the node list:
         for (int i = 0; i < leafNodesList.Count; i++)
         {
             // Get current Area.
-            currentNode = leafNodesList[i];
+            currentNode = _leafNodes[i];
             currentArea = currentNode.Data;
             
             // Pick a random x and y offset, both within width/2 and height/2.
@@ -205,38 +155,36 @@ public class Tree
                 currentArea.Y + yOffset,
                 roomWidth,
                 roomHeight);
-            roomList.Add(newRoom);
+            _roomList.Add(newRoom);
             
         }
-        return roomList;
     }
+    
     // Takes a list of rooms and adds to the list a series of corridors between rooms.
-    public List<Area> CreateCorridors(List<Area> roomList)
+    public void CreateCorridors(List<Area> roomList)
     {
         // Shuffle the list
-        int n = roomList.Count;
+        int n = _roomList.Count;
         while (n > 1)
         {
             n--;
             int k = _random.Next(n + 1);
-            Area val = roomList[k];
-            roomList[k] = roomList[n];
-            roomList[n] = val;
-            //(roomList[k], roomList[n]) = (roomList[n], roomList[k]);
+            Area val = _roomList[k];
+            _roomList[k] = _roomList[n];
+            _roomList[n] = val;
         }
-        Area roomA, roomB;
-        Area pointA, pointB;
-        List<Area> corridors = new List<Area>(); // added at once after all are generated.
+       
+        // Corridors are stored in a separate list so that _roomList is not modified while it is being
+        // read.
+        List<Area> corridors = new List<Area>();
 
-        for (int i = 0; i < roomList.Count - 1; i++)
+        for (int i = 0; i < _roomList.Count - 1; i++)
         {
-            roomA = roomList[i];
-            roomB = roomList[i + 1];
+            Area roomA = _roomList[i];
+            Area roomB = _roomList[i + 1];
 
-            pointA = RandPointWithin(roomA);
-            Console.WriteLine("A: " + pointA.X + ", " + pointA.Y);
-            pointB = RandPointWithin(roomB);
-            Console.WriteLine("B: " + pointB.X + ", " + pointB.Y);
+            Area pointA = RandPointWithin(roomA);
+            Area pointB = RandPointWithin(roomB);
             
             // Create a rectangular area that spans the width.
             Area widthSpan;
@@ -272,11 +220,10 @@ public class Tree
             }
             corridors.Add(heightSpan);
         }
-
-        foreach (Area corridor in corridors)
-            roomList.Add(corridor);
         
-        return roomList;
+        // Now that we are finished adding corridors, we can safely add them all to _roomList.
+        foreach (Area corridor in corridors)
+            _roomList.Add(corridor);
     }
 
     private Area RandPointWithin(Area room)
@@ -335,29 +282,18 @@ public class Tree
             SplitAll();
         
         // Generate rooms within the bounds of the partitioned areas
-        List<Area> roomList = CreateRooms(_leafNodes);
+        CreateRooms(_leafNodes);
         
         // Generate corridors to attempt to sequentially connect the rooms
-        roomList = CreateCorridors(roomList);
+        CreateCorridors(_roomList);
         
         // Convert the rooms and corridors from a list of rooms' XYWH into a map with 0 for wall and 1 for floor
-        int[,] map = MakeMapArr(roomList);
+        int[,] map = MakeMapArr(_roomList);
         
         // TODO: Use a simple pathfinding algorithm to find unreachable areas
-        HandleUnreachableAreas(map, roomList);
+        HandleUnreachableAreas(map, _roomList);
         // Either add teleporters or corridors or something else entirely
 
-        // TODO: HACK. FIX!!!
-        _roomList = roomList;
-        
-        int[] spotArr = GetEntitySpot();
-        Console.WriteLine(spotArr[0] + ", " + spotArr[1]);
-
-        spotArr = GetEntitySpot();
-        Console.WriteLine(spotArr[0] + ", " + spotArr[1]);
-        
-        spotArr = GetEntitySpot();
-        Console.WriteLine(spotArr[0] + ", " + spotArr[1]);
         // TODO: Compute some good spots for mobs and items to be spawned, and flag them as 2 and 3?
 
         return map;
@@ -366,17 +302,24 @@ public class Tree
     public int[] GetEntitySpot()
     {
         Area room = _roomList[_random.Next(_roomList.Count)];
-        int X = _random.Next(room.X, room.X + room.W);
-        int Y = _random.Next(room.Y, room.Y + room.H);
+        int x = _random.Next(room.X, room.X + room.W);
+        int y = _random.Next(room.Y, room.Y + room.H);
         int[] arr = new int[2];
-        arr[0] = X;
-        arr[1] = Y;
+        arr[0] = x;
+        arr[1] = y;
         return arr;
     }
     
+    #if !UNITY_EDITOR
+    /*
+     * The main method is not used in the game itself, but is used for testing
+     * the dungeon generation algorithm in a separate executable, compiled with
+     * dungeontest.sh.
+     */
     public static void Main(string[] args)
     {
         Tree tree = new Tree();
         tree.PrintMapArr(tree.GenerateMap());
     }
+    #endif
 }
