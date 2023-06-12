@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/*
+ *  LevelGenerator
+ *
+ *  Purpose: Draw the level onto the TileMap with the Tiles specified.
+ *  Has a Tree type object, which does all the procedural generation.
+ *  This class just iterates over data given by the Tree, and draws it
+ *  to the game world.
+ */
 public class LevelGenerator : MonoBehaviour
 {
     // Data members
@@ -37,7 +45,7 @@ public class LevelGenerator : MonoBehaviour
     
     // private members
     private int[,] _mapArray;
-    public void generateLevel()
+    public void GenerateLevel()
     {
         // Set up a binary tree and use it to generate the level.
         Tree binaryTree = new Tree();
