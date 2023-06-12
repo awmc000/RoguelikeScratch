@@ -17,6 +17,7 @@ public class Tree
 {
     private TreeNode _root;
     private List<TreeNode> _leafNodes;
+    private List<Area> _roomList;
 
     public const int DungeonWidth   = 80;
     public const int DungeonHeight  = 40;
@@ -346,22 +347,25 @@ public class Tree
         HandleUnreachableAreas(map, roomList);
         // Either add teleporters or corridors or something else entirely
 
-        int[] spotArr = GetEntitySpot(roomList);
+        // TODO: HACK. FIX!!!
+        _roomList = roomList;
+        
+        int[] spotArr = GetEntitySpot();
         Console.WriteLine(spotArr[0] + ", " + spotArr[1]);
 
-        spotArr = GetEntitySpot(roomList);
+        spotArr = GetEntitySpot();
         Console.WriteLine(spotArr[0] + ", " + spotArr[1]);
         
-        spotArr = GetEntitySpot(roomList);
+        spotArr = GetEntitySpot();
         Console.WriteLine(spotArr[0] + ", " + spotArr[1]);
         // TODO: Compute some good spots for mobs and items to be spawned, and flag them as 2 and 3?
 
         return map;
     }
 
-    public int[] GetEntitySpot(List<Area> roomList)
+    public int[] GetEntitySpot()
     {
-        Area room = roomList[_random.Next(roomList.Count)];
+        Area room = _roomList[_random.Next(_roomList.Count)];
         int X = _random.Next(room.X, room.X + room.W);
         int Y = _random.Next(room.Y, room.Y + room.H);
         int[] arr = new int[2];
