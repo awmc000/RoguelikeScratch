@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
 
         eventLog.logEvent("The Burrow Tale begins.");
 
-        levelGenerator.generateLevel();
+        levelGenerator.GenerateLevel();
     }
 
     public bool TileFree(Transform myPos, Vector2 targetPos)
@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
 
     public void HurtPlayer(int damage)
     {
-        player.changeHealth(-damage);
+        player.ChangeHealth(-damage);
     }
 
     public void hurtMob(Mob target, int damage)
@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
 
     void OnGUI()
     {
-        GUI.Box(_labelRect, "Turn " + _turnsPassed + "; HP: [" + new string('█', player.getHealth())
+        GUI.Box(_labelRect, "Turn " + _turnsPassed + "; HP: [" + new string('█', player.GetHealth())
             + "]", _labelStyle);
     }
 

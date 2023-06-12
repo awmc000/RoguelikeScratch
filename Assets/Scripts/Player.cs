@@ -6,45 +6,45 @@ using UnityEngine.Tilemaps;
 public class Player : MonoBehaviour
 {
     // data members
-    bool debouncing;
-    Vector3 movementVector;
-    Vector2 targetPosition;
+    bool _debouncing;
+    Vector3 _movementVector;
+    Vector2 _targetPosition;
     public TilemapCollider2D tilemapCollider2D;
     public GameManager gameManager;
 
     public int maxHealth;
-    int currentHealth;
+    int _currentHealth;
     public int attackDamage;
 
     public AudioSource attackSound;
 
     // Setters and getters
-    public int getHealth()
+    public int GetHealth()
     {
-        return currentHealth;
+        return _currentHealth;
     }
 
-    public void changeHealth(int change)
+    public void ChangeHealth(int change)
     {
-        currentHealth += change;
+        _currentHealth += change;
     }
 
-    public void setHealth(int newHealth)
+    public void SetHealth(int newHealth)
     {
-        currentHealth = newHealth;
+        _currentHealth = newHealth;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        movementVector = new Vector3(0.0f, 0.0f, 0.0f);
-        targetPosition = new Vector2(0.0f, 0.0f);
-        currentHealth = maxHealth;
+        _movementVector = new Vector3(0.0f, 0.0f, 0.0f);
+        _targetPosition = new Vector2(0.0f, 0.0f);
+        _currentHealth = maxHealth;
     }
 
-    private void handleInput()
+    private void HandleInput()
     {
-        if (!debouncing)
+        if (!_debouncing)
         {
             // up, north
             if (Input.GetKeyDown(KeyCode.Keypad8))
@@ -109,50 +109,50 @@ public class Player : MonoBehaviour
         {
             // N
             case KeyCode.Keypad8:
-                movementVector.Set(0.0f, 1.0f, 0.0f);
-                targetPosition += Vector2.up;
+                _movementVector.Set(0.0f, 1.0f, 0.0f);
+                _targetPosition += Vector2.up;
                 break;
 
             // NW
             case KeyCode.Keypad7:
-                movementVector.Set(-1.0f, 1.0f, 0.0f);
-                targetPosition += Vector2.up + Vector2.left;
+                _movementVector.Set(-1.0f, 1.0f, 0.0f);
+                _targetPosition += Vector2.up + Vector2.left;
                 break;
 
             // NE
             case KeyCode.Keypad9:
-                movementVector.Set(1.0f, 1.0f, 0.0f);
-                targetPosition += Vector2.up + Vector2.right;
+                _movementVector.Set(1.0f, 1.0f, 0.0f);
+                _targetPosition += Vector2.up + Vector2.right;
                 break;
 
             // S
             case KeyCode.Keypad2:
-                movementVector.Set(0.0f, -1.0f, 0.0f);
-                targetPosition += Vector2.down;
+                _movementVector.Set(0.0f, -1.0f, 0.0f);
+                _targetPosition += Vector2.down;
                 break;
 
             // SW
             case KeyCode.Keypad1:
-                movementVector.Set(-1.0f, -1.0f, 0.0f);
-                targetPosition += Vector2.down + Vector2.left;
+                _movementVector.Set(-1.0f, -1.0f, 0.0f);
+                _targetPosition += Vector2.down + Vector2.left;
                 break;
 
             // SE
             case KeyCode.Keypad3:
-                movementVector.Set(1.0f, -1.0f, 0.0f);
-                targetPosition += Vector2.down + Vector2.right;
+                _movementVector.Set(1.0f, -1.0f, 0.0f);
+                _targetPosition += Vector2.down + Vector2.right;
                 break;
 
             // W
             case KeyCode.Keypad4:
-                movementVector.Set(-1.0f, 0.0f, 0.0f);
-                targetPosition += Vector2.left;
+                _movementVector.Set(-1.0f, 0.0f, 0.0f);
+                _targetPosition += Vector2.left;
                 break;
 
             // E
             case KeyCode.Keypad6:
-                movementVector.Set(1.0f, 0.0f, 0.0f);
-                targetPosition += Vector2.right;
+                _movementVector.Set(1.0f, 0.0f, 0.0f);
+                _targetPosition += Vector2.right;
                 break;
 
             // WAIT
@@ -164,13 +164,13 @@ public class Player : MonoBehaviour
         // The targetPosition vector stores where the player wants to go.
         // We check if the player can go there, and if so, make the move.
 
-        if (gameManager.TileFree(transform, targetPosition))
+        if (gameManager.TileFree(transform, _targetPosition))
         {
-            transform.localPosition += movementVector;
+            transform.localPosition += _movementVector;
         }
-        else if (gameManager.MobAtTile(targetPosition))
+        else if (gameManager.MobAtTile(_targetPosition))
         {
-            Mob targetMob = gameManager.GetMobAtTile(targetPosition);
+            Mob targetMob = gameManager.GetMobAtTile(_targetPosition);
             targetMob.changeHealth(-attackDamage);
             attackSound.PlayDelayed(0.5f);
             gameManager.eventLog.logEvent("Player hit " + targetMob.mobName + " for " + attackDamage 
@@ -183,24 +183,25 @@ public class Player : MonoBehaviour
             }
         }
 
-        movementVector.Set(0.0f, 0.0f, 0.0f);
-        targetPosition.x = transform.localPosition.x;
-        targetPosition.y = transform.localPosition.y;
+        _movementVector.Set(0.0f, 0.0f, 0.0f);
+        _targetPosition = transform.localPosition;
+        //_targetPosition.x = transform.localPosition.x;
+        //_targetPosition.y = transform.localPosition.y;
 
         gameManager.FinishTurn();
 
         yield return new WaitForSeconds(0.125f);
 
-        debouncing = false;
+        _debouncing = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        handleInput();
+        HandleInput();
 
         // check if I'm dead!
-        if (currentHealth <= 0)
+        if (_currentHealth <= 0)
         {
             gameManager.GameOver();
         }
