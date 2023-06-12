@@ -12,17 +12,16 @@ using Random = System.Random;
  */
 public class Tree
 {
-    private TreeNode _root;
-    private List<TreeNode> _leafNodes = new List<TreeNode>();
-    private List<Area> _roomList = new List<Area>();
-
-    public const int DungeonWidth   = 80;
+    // Constants
+    public const int DungeonWidth   = 80; // In tiles
     public const int DungeonHeight  = 40;
-    public const int SplitMargin    = 1;
-
-    private const int CorridorWidth = 1;
-
-    private const int SplitIterations = 3;
+    private const int SplitMargin    = 1; // How many tiles between rooms
+    private const int CorridorWidth = 1; 
+    private const int SplitIterations = 3; // Dungeon will have 2^SplitIterations. So if this is 3, 8 rooms.
+    
+    private TreeNode _root;
+    private List<TreeNode> _leafNodes;
+    private List<Area> _roomList;
 
     private Random _random = new Random();
     
@@ -32,6 +31,7 @@ public class Tree
         _root.Data = new Area(0, 0, DungeonWidth, DungeonHeight);
         _leafNodes = new List<TreeNode>();
         _leafNodes.Add(_root);
+        _roomList = new List<Area>();
     }
     
     // Split each leaf. Make the leafs children the new leafs.
@@ -77,6 +77,9 @@ public class Tree
         }   
     }
 
+    #if !UNITY_EDITOR
+    // Prints a dungeon layout in ASCII to the terminal.
+    // Used in testing with dungeontest.sh
     public void PrintMapArr(int[,] mapArr)
     {
         for (int y = 0; y < DungeonHeight; y++)
@@ -97,6 +100,7 @@ public class Tree
             Console.WriteLine();
         }
     }
+    #endif
 
     public int[,] MakeMapArr(List<Area> areaList)
     {
@@ -186,18 +190,22 @@ public class Tree
             // Create a rectangular area that spans the width.
             Area widthSpan;
             int corridorLength;
+            
             // If A is to the left of B
             if (pointA.X < pointB.X)
             {
+                // then length is B.X - A.X
                 corridorLength = pointB.X - pointA.X;
                 widthSpan = new Area(pointA.X, pointA.Y, corridorLength, CorridorWidth);
             }
             // If B is to the left of A
             else
             {
+                // then length is A.X - B.X
                 corridorLength = pointA.X - pointB.X;
                 widthSpan = new Area(pointB.X, pointB.Y, corridorLength, CorridorWidth);
             }
+            
             corridors.Add(widthSpan);
             
             // Create a rectangular area that spans the height.
@@ -206,12 +214,14 @@ public class Tree
             // If A is above B
             if (pointA.Y < pointB.Y)
             {
+                // then height is B.Y - A.Y
                 corridorHeight = pointB.Y - pointA.Y;
                 heightSpan = new Area(pointA.X , pointA.Y, CorridorWidth, corridorHeight);
             }
             // If B is above A
             else
             {
+                // then height is A.Y - B.Y
                 corridorHeight = pointA.Y - pointB.Y;
                 heightSpan = new Area(pointB.X, pointB.Y, CorridorWidth, corridorHeight);
             }
@@ -296,6 +306,9 @@ public class Tree
         return map;
     }
 
+    // Returns a spot with a floor tile, where a player, mob, or item could be placed.
+    // Currently returns a 2-element array. A vector would be preferable, but this 
+    // needs to work outside the editor.
     public int[] GetEntitySpot()
     {
         Area room = _roomList[_random.Next(_roomList.Count)];
