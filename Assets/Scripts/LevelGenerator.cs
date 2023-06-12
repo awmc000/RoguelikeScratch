@@ -42,16 +42,17 @@ public class LevelGenerator : MonoBehaviour
     public Tile wallTileBottomLeft;
     public Tile wallTileBottomCentre;
     public Tile wallTileBottomRight;*/
-    
+    public Tree BinaryTree = new Tree();
     // private members
     private int[,] _mapArray;
+    
     public void GenerateLevel()
     {
         // Set up a binary tree and use it to generate the level.
-        Tree binaryTree = new Tree();
+        //Tree binaryTree = new Tree();
         
         // Get an int array from the binary tree.
-        _mapArray = binaryTree.GenerateMap();
+        _mapArray = BinaryTree.GenerateMap();
         
         // Iterate over the map array
         Vector3Int position = new Vector3Int(0, 0, 0);
