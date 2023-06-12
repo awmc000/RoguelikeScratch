@@ -221,6 +221,7 @@ public class Tree
             Area val = roomList[k];
             roomList[k] = roomList[n];
             roomList[n] = val;
+            //(roomList[k], roomList[n]) = (roomList[n], roomList[k]);
         }
         Area roomA, roomB;
         Area pointA, pointB;
@@ -232,7 +233,9 @@ public class Tree
             roomB = roomList[i + 1];
 
             pointA = RandPointWithin(roomA);
+            Console.WriteLine("A: " + pointA.X + ", " + pointA.Y);
             pointB = RandPointWithin(roomB);
+            Console.WriteLine("B: " + pointB.X + ", " + pointB.Y);
             
             // Create a rectangular area that spans the width.
             Area widthSpan;
@@ -244,7 +247,7 @@ public class Tree
                 widthSpan = new Area(pointA.X, pointA.Y, corridorLength, CorridorWidth);
             }
             // If B is to the left of A
-            else //if (pointB.X < pointA.X)
+            else
             {
                 corridorLength = pointA.X - pointB.X;
                 widthSpan = new Area(pointB.X, pointB.Y, corridorLength, CorridorWidth);
@@ -278,10 +281,21 @@ public class Tree
     private Area RandPointWithin(Area room)
     {
         Area point = new Area(0, 0, 0, 0);
-        point.X = _random.Next(room.X, room.X + room.W - 1);
-        point.Y = _random.Next(room.Y, room.Y + room.H - 1);
+        point.X = _random.Next(room.X + 1, room.X + room.W + 1);
+        point.Y = _random.Next(room.Y + 1, room.Y + room.H + 1);
         return point;
     }
+
+    private void HandleUnreachableAreas(int[,] map, List<Area> roomList)
+    {
+        // TODO: Convert the map to a graph represented by an unweighted adjacency list.
+        
+        // TODO: Take the first room in the room list, and iterate over all other rooms.
+        
+        // TODO: If the rooms are all connected, a path will exist. If not, the map needs to be regenerated.
+        // OR, an extra corridor could be drawn to that inaccessible room.
+    }
+    
     // Split `node` into exact halves along a vertical line. No random generation of room dimensions.
     private void HalveVertically(TreeNode node, TreeNode newLChild, TreeNode newRChild)
     {
@@ -329,11 +343,31 @@ public class Tree
         int[,] map = MakeMapArr(roomList);
         
         // TODO: Use a simple pathfinding algorithm to find unreachable areas
+        HandleUnreachableAreas(map, roomList);
         // Either add teleporters or corridors or something else entirely
+
+        int[] spotArr = GetEntitySpot(roomList);
+        Console.WriteLine(spotArr[0] + ", " + spotArr[1]);
+
+        spotArr = GetEntitySpot(roomList);
+        Console.WriteLine(spotArr[0] + ", " + spotArr[1]);
         
+        spotArr = GetEntitySpot(roomList);
+        Console.WriteLine(spotArr[0] + ", " + spotArr[1]);
         // TODO: Compute some good spots for mobs and items to be spawned, and flag them as 2 and 3?
 
         return map;
+    }
+
+    public int[] GetEntitySpot(List<Area> roomList)
+    {
+        Area room = roomList[_random.Next(roomList.Count)];
+        int X = _random.Next(room.X, room.X + room.W);
+        int Y = _random.Next(room.Y, room.Y + room.H);
+        int[] arr = new int[2];
+        arr[0] = X;
+        arr[1] = Y;
+        return arr;
     }
     
     public static void Main(string[] args)
