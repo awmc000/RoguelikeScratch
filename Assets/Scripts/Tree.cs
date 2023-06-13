@@ -18,6 +18,9 @@ public class Tree
     private const int SplitMargin    = 1; // How many tiles between rooms
     private const int CorridorWidth = 1; 
     private const int SplitIterations = 3; // Dungeon will have 2^SplitIterations. So if this is 3, 8 rooms.
+
+    public const int TileFlagFloor = 1;
+    public const int TileFlagWall = 0;
     
     private TreeNode _root;
     private List<TreeNode> _leafNodes;
@@ -90,10 +93,10 @@ public class Tree
                 int v = mapArr[x, y];
                 switch (v)
                 {
-                    case 0:
+                    case TileFlagWall:
                         Console.Write('█');
                         break;
-                    case 1:
+                    case TileFlagFloor:
                         Console.Write('.');
                         break;
                 }
@@ -119,7 +122,7 @@ public class Tree
             {
                 for (int x = 0; x < currentArea.W; x++)
                 {
-                    mapArr[currentArea.X + x, currentArea.Y + y] = 1;
+                    mapArr[currentArea.X + x, currentArea.Y + y] = TileFlagFloor;
                 }
             }
         }
@@ -275,16 +278,6 @@ public class Tree
         return point;
     }
 
-    private void HandleUnreachableAreas(int[,] map, List<Area> roomList)
-    {
-        // TODO: Convert the map to a graph represented by an unweighted adjacency list.
-        
-        // TODO: Take the first room in the room list, and iterate over all other rooms.
-        
-        // TODO: If the rooms are all connected, a path will exist. If not, the map needs to be regenerated.
-        // OR, an extra corridor could be drawn to that inaccessible room.
-    }
-    
     // Split `node` into exact halves along a vertical line. No random generation of room dimensions.
     private void HalveVertically(TreeNode node, TreeNode newLChild, TreeNode newRChild)
     {
@@ -331,10 +324,6 @@ public class Tree
         // Convert the rooms and corridors from a list of rooms' XYWH into a map with 0 for wall and 1 for floor
         int[,] map = MakeMapArr(_roomList);
         
-        // TODO: Use a simple pathfinding algorithm to find unreachable areas
-        HandleUnreachableAreas(map, _roomList);
-        // Either add teleporters or corridors or something else entirely
-
         // TODO: Compute some good spots for mobs and items to be spawned, and flag them as 2 and 3?
 
         return map;
