@@ -164,14 +164,14 @@ public class Player : MonoBehaviour
         // The targetPosition vector stores where the player wants to go.
         // We check if the player can go there, and if so, make the move.
 
-        if (gameManager.TileFree(transform, _targetPosition))
+        if (gameManager.TileFree(_targetPosition))
         {
             transform.localPosition += _movementVector;
         }
         else if (gameManager.MobAtTile(_targetPosition))
         {
             Mob targetMob = gameManager.GetMobAtTile(_targetPosition);
-            targetMob.changeHealth(-attackDamage);
+            targetMob.ChangeHealth(-attackDamage);
             attackSound.PlayDelayed(0.5f);
             gameManager.eventLog.logEvent("Player hit " + targetMob.mobName + " for " + attackDamage 
                 + " damage, it now has " + targetMob.currentHealth);

@@ -50,11 +50,19 @@ public class GameManager : MonoBehaviour
         levelGenerator.GenerateLevel();
 
         int[] playerPos = levelGenerator.BinaryTree.GetEntitySpot();
-        Vector3 playerPosVec = new Vector3(playerPos[0], playerPos[1], 0);
+        Vector3 playerPosVec = new Vector3(playerPos[0] + 0.5f, playerPos[1] + 0.5f, 0);
         player.transform.position = playerPosVec;
+
+        int[] mobSpotArr = levelGenerator.BinaryTree.GetEntitySpot();
+        Vector3 mobSpotVec = new Vector3(mobSpotArr[0] + 0.5f, mobSpotArr[1] + 0.5f, 0);
+        Instantiate(levelGenerator.Mob, mobSpotVec, Quaternion.identity);
+
+        mobSpotArr = levelGenerator.BinaryTree.GetEntitySpot();
+        mobSpotVec = new Vector3(mobSpotArr[0] + 0.5f, mobSpotArr[1] + 0.5f, 0);
+        Instantiate(levelGenerator.Mob, mobSpotVec, Quaternion.identity);
     }
 
-    public bool TileFree(Transform myPos, Vector2 targetPos)
+    public bool TileFree(Vector2 targetPos)
     {
 
         // Check if there is a blocked tile there.
@@ -109,9 +117,9 @@ public class GameManager : MonoBehaviour
         player.ChangeHealth(-damage);
     }
 
-    public void hurtMob(Mob target, int damage)
+    public void HurtMob(Mob target, int damage)
     {
-        target.changeHealth(-damage);
+        target.ChangeHealth(-damage);
     }
 
     public Vector2 GetPlayerPos()
@@ -139,7 +147,7 @@ public class GameManager : MonoBehaviour
         // Tell the NPCs to do their next move.
         foreach (Mob mob in mobsOnScreen)
         {
-            mob.makeMove();
+            mob.MakeMove();
         }
         // Advance the turn counter.
         _turnsPassed++;
