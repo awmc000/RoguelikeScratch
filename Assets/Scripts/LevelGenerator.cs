@@ -43,8 +43,51 @@ public class LevelGenerator : MonoBehaviour
     public Tile wallTileBottomCentre;
     public Tile wallTileBottomRight;*/
     public Tree BinaryTree = new Tree();
+
+    public GameObject Mob;
     // private members
     private int[,] _mapArray;
+
+    // Returns true if the given tile, touches a floor tile. 
+    private bool TouchesFloor(int wallX, int wallY)
+    {
+        bool TL = false, T = false, TR = false, 
+            L = false, R = false, 
+            BL = false, B = false, BR = false;
+
+        bool notTopBoundary = wallY > 1; 
+        bool notBottomBoundary = wallY < Tree.DungeonHeight - 1;
+        bool notLeftBoundary = wallX > 1;
+        bool notRightBoundary = wallX < Tree.DungeonWidth - 1;
+
+        if (notTopBoundary && notLeftBoundary)
+            TL = _mapArray[wallX - 1, wallY - 1] == Tree.TileFlagFloor;
+        
+        if (notTopBoundary)
+            T  = _mapArray[wallX,     wallY - 1] == Tree.TileFlagFloor;
+        
+        if (notTopBoundary && notRightBoundary)
+            TR = _mapArray[wallX + 1, wallY - 1] == Tree.TileFlagFloor;
+
+        if (notLeftBoundary)
+            L  = _mapArray[wallX - 1, wallY    ] == Tree.TileFlagFloor;
+        
+        if (notRightBoundary)
+            R  = _mapArray[wallX + 1, wallY    ] == Tree.TileFlagFloor;
+        
+        if (notBottomBoundary && notLeftBoundary)
+            BL = _mapArray[wallX - 1, wallY + 1] == Tree.TileFlagFloor;
+        
+        if (notBottomBoundary)
+            B  = _mapArray[wallX,     wallY + 1] == Tree.TileFlagFloor;
+        
+        if (notBottomBoundary && notRightBoundary)
+            BR = _mapArray[wallX + 1, wallY + 1] == Tree.TileFlagFloor;
+        
+        return (TL || T || TR || 
+                L  ||      R  ||
+                BL || B || BR );
+    }
     
     public void GenerateLevel()
     {
@@ -65,7 +108,13 @@ public class LevelGenerator : MonoBehaviour
                 switch (_mapArray[x, y])
                 {
                     case 0: // wall
-                        wallMap.SetTile(position, wallTile);
+                        /*
+                        if (((x < Tree.DungeonWidth - 1 && y < Tree.DungeonHeight - 1) &&
+                            (x > 0 && y > 0)) 
+                            && TouchesFloor(x, y))
+                        */
+                        if (TouchesFloor(x,y))
+                            wallMap.SetTile(position, wallTile);
                         break;
                     case 1: // floor
                         floorMap.SetTile(position, floorTile);
