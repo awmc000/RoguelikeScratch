@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Mob : MonoBehaviour
@@ -10,27 +8,26 @@ public class Mob : MonoBehaviour
     public int sightRadius;
     public GameManager gameManager;
 
-    Vector3 movementVector;
-    Vector2 targetPos;
+    Vector2 _targetPos;
 
     public AudioSource attackSound;
 
-    public int getHealth()
+    public int GetHealth()
     {
         return currentHealth;
     }
 
-    public void changeHealth(int change)
+    public void ChangeHealth(int change)
     {
         currentHealth += change;
     }
 
-    public void setHealth(int newHealth)
+    public void SetHealth(int newHealth)
     {
         currentHealth = newHealth;
     }
 
-    public void attackPlayer()
+    public void AttackPlayer()
     {
         gameManager.HurtPlayer(1);
         gameManager.eventLog.logEvent(mobName + " hit you for 1 dmg.");
@@ -39,7 +36,7 @@ public class Mob : MonoBehaviour
     public void moveToPlayer()
     {
         Vector2 playerPos = gameManager.GetPlayerPos();
-        targetPos = (Vector2) transform.position;
+        _targetPos = transform.position;
         // Find whether to travel west, east, or neither
         float distX = playerPos.x - transform.position.x;
         // if negative, mob -> player (mob needs to go east)
@@ -47,27 +44,27 @@ public class Mob : MonoBehaviour
         // if zero, neither
         if (distX < 0)
         {
-            targetPos.x -= 1;
+            _targetPos.x -= 1;
         }
         else if (distX > 0)
         {
-            targetPos.x += 1;
+            _targetPos.x += 1;
         }
 
         float distY = playerPos.y - transform.position.y;
 
         if (distY < 0)
         {
-            targetPos.y -= 1;
+            _targetPos.y -= 1;
         }
         else if (distY > 0)
         {
-            targetPos.y += 1;
+            _targetPos.y += 1;
         }
 
-        if (gameManager.TileFree(transform, targetPos))
+        if (gameManager.TileFree(_targetPos))
         {
-            transform.localPosition = targetPos;
+            transform.localPosition = _targetPos;
         }
 
     }
@@ -76,41 +73,45 @@ public class Mob : MonoBehaviour
     public bool inSight()
     {
         Vector2 playerPos = gameManager.GetPlayerPos();
-        float checkX = playerPos.x - transform.position.x;
-        float checkY = playerPos.y - transform.position.y;
+        Vector3 myPos = transform.position;
+        float checkX = playerPos.x - myPos.x;
+        float checkY = playerPos.y - myPos.y;
 
         return ((Mathf.Abs(checkX) <= sightRadius) &&
                 (Mathf.Abs(checkY) <= sightRadius));
     }
 
     // Move around randomly.
-    public void bumble()
+    public void Bumble()
     {
 
     }
 
     // Determines and executes the mob's action this turn.
-    public void makeMove()
+    public void MakeMove()
     {
         // First priority: attack the player if touching.
         if (gameManager.CanFight(this))
         {
-            attackPlayer();
+            AttackPlayer();
             attackSound.Play();
             return;
         }
         // Second priority: Walk toward the player if they are in sight radius.
         if (inSight())
+        {
             moveToPlayer();
-
+            return;
+        }
+        
         // Third priority: Bumble around if neither touching or in sight radius.
+        Bumble();
     }
     
     // Start is called before the first frame update
     void Start()
     {
-        movementVector = new Vector3(0.0f, 0.0f, 0.0f);
-        targetPos = new Vector2(0.0f, 0.0f);
+        _targetPos = new Vector2(0.0f, 0.0f);
         currentHealth = maxHealth;
     }
 
