@@ -23,7 +23,7 @@ public class Tree
     private List<TreeNode> _leafNodes;
     private List<Area> _roomList;
 
-    private Random _random = new Random();
+    private Random _random;
     
     public Tree()
     {
@@ -32,6 +32,7 @@ public class Tree
         _leafNodes = new List<TreeNode>();
         _leafNodes.Add(_root);
         _roomList = new List<Area>();
+        _random = new Random();
     }
     
     // Split each leaf. Make the leafs children the new leafs.
@@ -129,12 +130,12 @@ public class Tree
     // Takes a fully partitioned list of nodes with areas and put a room in each one.
     // Returns a list of Areas describing rooms. Essentially randomly carves out a room within
     // the bounds of each Area given by the Data members of nodes in the node list.
-    public void CreateRooms(List<TreeNode> leafNodesList)
+    public void CreateRooms()
     {
         TreeNode currentNode;
         Area currentArea;
         // For each node in the node list:
-        for (int i = 0; i < leafNodesList.Count; i++)
+        for (int i = 0; i < _leafNodes.Count; i++)
         {
             // Get current Area.
             currentNode = _leafNodes[i];
@@ -162,7 +163,7 @@ public class Tree
     }
     
     // Takes a list of rooms and adds to the list a series of corridors between rooms.
-    public void CreateCorridors(List<Area> roomList)
+    public void CreateCorridors()
     {
         // Shuffle the list
         int n = _roomList.Count;
@@ -184,7 +185,10 @@ public class Tree
             Area roomA = _roomList[i];
             Area roomB = _roomList[i + 1];
 
+            Console.WriteLine("Point A:");
             Area pointA = RandPointWithin(roomA);
+            
+            Console.WriteLine("Point B");
             Area pointB = RandPointWithin(roomB);
             
             // Create a rectangular area that spans the width.
@@ -216,14 +220,14 @@ public class Tree
             {
                 // then height is B.Y - A.Y
                 corridorHeight = pointB.Y - pointA.Y;
-                heightSpan = new Area(pointA.X , pointA.Y, CorridorWidth, corridorHeight);
+                heightSpan = new Area(widthSpan.X + widthSpan.W, pointA.Y, CorridorWidth, corridorHeight);
             }
             // If B is above A
             else
             {
                 // then height is A.Y - B.Y
                 corridorHeight = pointA.Y - pointB.Y;
-                heightSpan = new Area(pointB.X, pointB.Y, CorridorWidth, corridorHeight);
+                heightSpan = new Area(widthSpan.X + widthSpan.W, pointB.Y, CorridorWidth, corridorHeight);
             }
             corridors.Add(heightSpan);
         }
@@ -235,9 +239,39 @@ public class Tree
 
     private Area RandPointWithin(Area room)
     {
+        // Pick a random point, where:
+        // 0 == Top
+        // 1 == Bottom
+        // 2 == Left
+        // 3 == Right
+        int side = _random.Next(4);
+
         Area point = new Area(0, 0, 0, 0);
-        point.X = _random.Next(room.X + 1, room.X + room.W + 1);
-        point.Y = _random.Next(room.Y + 1, room.Y + room.H + 1);
+
+        switch (side)
+        {
+            case 0:
+                // pick a point on the top edge
+                point.Y = room.Y + room.H;
+                point.X = _random.Next(room.X, room.X + room.W);
+                break;
+            case 1:
+                // pick a point on the bottom edge
+                point.Y = room.Y;
+                point.X = _random.Next(room.X, room.X + room.W);
+                break;
+            case 2:
+                // pick a point on the left edge
+                point.X = room.X;
+                point.Y = _random.Next(room.Y, room.Y + room.H);
+                break;
+            case 3:
+                // pick a point on the right edge
+                point.X = room.X + room.W;
+                point.Y = _random.Next(room.Y, room.Y + room.H);
+                break;
+        }
+        Console.WriteLine("X: " + room.X + ", Y: " + room.Y);
         return point;
     }
 
@@ -289,10 +323,10 @@ public class Tree
             SplitAll();
         
         // Generate rooms within the bounds of the partitioned areas
-        CreateRooms(_leafNodes);
+        CreateRooms();
         
         // Generate corridors to attempt to sequentially connect the rooms
-        CreateCorridors(_roomList);
+        CreateCorridors();
         
         // Convert the rooms and corridors from a list of rooms' XYWH into a map with 0 for wall and 1 for floor
         int[,] map = MakeMapArr(_roomList);
