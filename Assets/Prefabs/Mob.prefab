@@ -180,6 +180,7 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 20
   sightRadius: 5
+  attackDamage: 1
   gameManager: {fileID: 0}
   attackSound: {fileID: 395051505997321246}
 --- !u!114 &1918370380
@@ -209,7 +210,7 @@ MonoBehaviour:
   - {x: 0.09718895, y: -0.27341866, z: 0}
   m_ShapePathHash: -384501593
   m_Mesh: {fileID: 0}
-  m_InstanceId: 45076
+  m_InstanceId: -1302
   m_LocalBounds:
     m_Center: {x: -0.031469345, y: 0.05035147, z: 0}
     m_Extent: {x: 0.4811182, y: 0.32377014, z: 0}

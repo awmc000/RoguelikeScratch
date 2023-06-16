@@ -34,6 +34,12 @@ public class Player : MonoBehaviour
         _currentHealth = newHealth;
     }
 
+    private void AttackMob()
+    {
+        Mob targetMob = gameManager.GetMobAtTile(_targetPosition);
+        gameManager.HurtMob(targetMob, attackDamage);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,54 +56,69 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad8))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad8));
+                return;
             }
 
             // northwest
             if (Input.GetKeyDown(KeyCode.Keypad7))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad7));
+                return;
             }
 
             // northeast
             if (Input.GetKeyDown(KeyCode.Keypad9))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad9));
+                return;
             }
             
             // down, south
             if (Input.GetKeyDown(KeyCode.Keypad2))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad2));
+                return;
             }
 
             // southwest
             if (Input.GetKeyDown(KeyCode.Keypad1))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad1));
+                return;
             }
 
             // southeast
             if (Input.GetKeyDown(KeyCode.Keypad3))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad3));
+                return;
             }
             
             // left, west
             if (Input.GetKeyDown(KeyCode.Keypad4))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad4));
+                return;
             }
 
             // right, east
             if (Input.GetKeyDown(KeyCode.Keypad6))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad6));
+                return;
             }
 
             // wait / pass turn
             if (Input.GetKeyDown(KeyCode.Keypad5))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad5));
+                return;
+            }
+            
+            // grab item
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                StartCoroutine(DebounceCoroutine(KeyCode.G));
             }
         }
 
@@ -159,6 +180,10 @@ public class Player : MonoBehaviour
             case KeyCode.Keypad5:
                 break;
 
+            case KeyCode.G:
+                PickupItem();
+                break;
+            
         }
 
         // The targetPosition vector stores where the player wants to go.
@@ -170,29 +195,22 @@ public class Player : MonoBehaviour
         }
         else if (gameManager.MobAtTile(_targetPosition))
         {
-            Mob targetMob = gameManager.GetMobAtTile(_targetPosition);
-            targetMob.ChangeHealth(-attackDamage);
-            attackSound.PlayDelayed(0.5f);
-            gameManager.eventLog.logEvent("Player hit " + targetMob.mobName + " for " + attackDamage 
-                + " damage, it now has " + targetMob.currentHealth);
-            if (targetMob.currentHealth <= 0)
-            {
-                Destroy(targetMob.transform.GetChild(0).gameObject);
-                Destroy(targetMob);
-                gameManager.UpdateMobsList();
-            }
+            AttackMob();
         }
 
         _movementVector.Set(0.0f, 0.0f, 0.0f);
         _targetPosition = transform.localPosition;
-        //_targetPosition.x = transform.localPosition.x;
-        //_targetPosition.y = transform.localPosition.y;
 
         gameManager.FinishTurn();
 
         yield return new WaitForSeconds(0.125f);
 
         _debouncing = false;
+    }
+
+    private void PickupItem()
+    {
+        gameManager.eventLog.logEvent(gameManager.GetItemPickupAtTile(transform.position).name);
     }
 
     // Update is called once per frame

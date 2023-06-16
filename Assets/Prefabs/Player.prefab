@@ -85,7 +85,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 7
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -193,7 +193,7 @@ MonoBehaviour:
   tilemapCollider2D: {fileID: 0}
   gameManager: {fileID: 0}
   maxHealth: 20
-  attackDamage: 5
+  attackDamage: 1
   attackSound: {fileID: 186964566901459339}
 --- !u!1 &2173065867789868650
 GameObject:
@@ -330,7 +330,7 @@ MonoBehaviour:
   - {x: -0.059618443, y: -0.36600685, z: 0}
   m_ShapePathHash: -907051967
   m_Mesh: {fileID: 0}
-  m_InstanceId: 42012
+  m_InstanceId: -1286
   m_LocalBounds:
     m_Center: {x: 0.00005096197, y: 0.0006274283, z: 0}
     m_Extent: {x: 0.35019195, y: 0.38239813, z: 0}
