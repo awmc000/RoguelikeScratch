@@ -45,6 +45,8 @@ public class LevelGenerator : MonoBehaviour
     public Tree BinaryTree = new Tree();
 
     public GameObject Mob;
+
+    public int floorTiles = 0;
     // private members
     private int[,] _mapArray;
 
@@ -118,6 +120,7 @@ public class LevelGenerator : MonoBehaviour
                         break;
                     case 1: // floor
                         floorMap.SetTile(position, floorTile);
+                        floorTiles++;
                         break;
 
                 }

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Mob : MonoBehaviour
@@ -6,9 +8,11 @@ public class Mob : MonoBehaviour
     public int maxHealth;
     public int currentHealth;
     public int sightRadius;
+    public int attackDamage;
     public GameManager gameManager;
 
     Vector2 _targetPos;
+    private Queue _path;
 
     public AudioSource attackSound;
 
@@ -22,23 +26,25 @@ public class Mob : MonoBehaviour
         currentHealth += change;
     }
 
-    public void SetHealth(int newHealth)
-    {
-        currentHealth = newHealth;
-    }
-
     public void AttackPlayer()
     {
-        gameManager.HurtPlayer(1);
-        gameManager.eventLog.logEvent(mobName + " hit you for 1 dmg.");
+        gameManager.HurtPlayer(attackDamage);
     }
 
+    // Uses a pathfinding algorithm to compute the shortest path from this to `destination`.
+    // The path is returned as a queue, where each item is a step in the path, and the first
+    // item out is the first step the mob needs to take.
+    private Queue<Vector2> ShortestPath(Vector2 destination)
+    {
+        // TODO: Implement
+        return null;
+    }
     public void moveToPlayer()
     {
         Vector2 playerPos = gameManager.GetPlayerPos();
         _targetPos = transform.position;
         // Find whether to travel west, east, or neither
-        float distX = playerPos.x - transform.position.x;
+        float distX = playerPos.x - _targetPos.x;
         // if negative, mob -> player (mob needs to go east)
         // if positive, player <- mob (mob needs to go west)
         // if zero, neither
@@ -51,7 +57,7 @@ public class Mob : MonoBehaviour
             _targetPos.x += 1;
         }
 
-        float distY = playerPos.y - transform.position.y;
+        float distY = playerPos.y - _targetPos.y;
 
         if (distY < 0)
         {
@@ -94,7 +100,6 @@ public class Mob : MonoBehaviour
         if (gameManager.CanFight(this))
         {
             AttackPlayer();
-            attackSound.Play();
             return;
         }
         // Second priority: Walk toward the player if they are in sight radius.

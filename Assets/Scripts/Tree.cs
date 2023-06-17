@@ -25,6 +25,7 @@ public class Tree
     private TreeNode _root;
     private List<TreeNode> _leafNodes;
     private List<Area> _roomList;
+    private int[,] _mapArray;
 
     private Random _random;
     
@@ -322,11 +323,11 @@ public class Tree
         CreateCorridors();
         
         // Convert the rooms and corridors from a list of rooms' XYWH into a map with 0 for wall and 1 for floor
-        int[,] map = MakeMapArr(_roomList);
+        _mapArray = MakeMapArr(_roomList);
         
         // TODO: Compute some good spots for mobs and items to be spawned, and flag them as 2 and 3?
 
-        return map;
+        return _mapArray;
     }
 
     // Returns a spot with a floor tile, where a player, mob, or item could be placed.
