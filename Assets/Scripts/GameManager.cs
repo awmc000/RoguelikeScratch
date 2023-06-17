@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     int _turnsPassed;
 
     Rect _labelRect;
+    Rect _inventoryRect;
     GUIStyle _labelStyle;
     public Font labelFont;
     public Player player;
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour
     public LevelGenerator levelGenerator;
 
     private GameDice _dice;
-    
+
     private Texture2D MakeTex( int width, int height, Color col )
     {
         Color[] pix = new Color[width * height];
@@ -49,6 +50,7 @@ public class GameManager : MonoBehaviour
         _labelStyle.normal.textColor = Color.white;
         _labelStyle.normal.background = MakeTex( 2, 2, new Color( 0f, 0f, 0f, 0.5f ) );
 
+        _inventoryRect = new Rect(200, 10, 320, 80);
         mobsOnScreen = FindObjectsOfType<Mob>();
 
         eventLog.logEvent("The Burrow Tale begins.");
@@ -254,6 +256,17 @@ public class GameManager : MonoBehaviour
     {
         GUI.Box(_labelRect, "Turn " + _turnsPassed + "; HP: " + player.GetHealth()
             + "/" + player.maxHealth, _labelStyle);
+
+        if (player.inventoryOpen)
+        {
+            string invList = "";
+            foreach (Item i in player.Inventory)
+            {
+                invList += i.Name + ":" + i.Description + ",\n";
+            }
+
+            GUI.Box(_inventoryRect, invList, _labelStyle);
+        }
     }
 
     /*

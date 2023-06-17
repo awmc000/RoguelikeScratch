@@ -38,6 +38,11 @@ public class ItemPickup : MonoBehaviour
         _item.Flags[flagName1] = flagValue1;
     }
 
+    public Item GetItem()
+    {
+        return _item;
+    }
+
     // Update is called once per frame
     void Update()
     {

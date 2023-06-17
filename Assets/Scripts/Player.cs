@@ -15,9 +15,14 @@ public class Player : MonoBehaviour
     public int maxHealth;
     int _currentHealth;
     public int attackDamage;
-
+    
     public AudioSource attackSound;
 
+    public List<Item> Inventory;
+    
+    // Interface booleans
+    public bool inventoryOpen;
+    
     // Setters and getters
     public int GetHealth()
     {
@@ -46,6 +51,8 @@ public class Player : MonoBehaviour
         _movementVector = new Vector3(0.0f, 0.0f, 0.0f);
         _targetPosition = new Vector2(0.0f, 0.0f);
         _currentHealth = maxHealth;
+        Inventory = new List<Item>();
+        inventoryOpen = false;
     }
 
     private void HandleInput()
@@ -120,6 +127,12 @@ public class Player : MonoBehaviour
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.G));
             }
+            
+            // toggle inventory menu
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                StartCoroutine(DebounceCoroutine(KeyCode.I));
+            }
         }
 
     }
@@ -180,10 +193,15 @@ public class Player : MonoBehaviour
             case KeyCode.Keypad5:
                 break;
 
+            // GRAB ITEM
             case KeyCode.G:
                 PickupItem();
                 break;
             
+            // TOGGLE INVENTORY MENU
+            case KeyCode.I:
+                inventoryOpen = !inventoryOpen;
+                break;
         }
 
         // The targetPosition vector stores where the player wants to go.
@@ -210,7 +228,11 @@ public class Player : MonoBehaviour
 
     private void PickupItem()
     {
-        gameManager.eventLog.logEvent(gameManager.GetItemPickupAtTile(transform.position).name);
+        ItemPickup itemPickup = gameManager.GetItemPickupAtTile(transform.position);
+        Item item = itemPickup.GetItem();
+        gameManager.eventLog.logEvent("Picked up " + item.Name + ".");
+        itemPickup.transform.gameObject.SetActive(false);
+        Inventory.Add(item);
     }
 
     // Update is called once per frame
