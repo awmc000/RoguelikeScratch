@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     Rect _labelRect;
     Rect _inventoryRect;
+    Rect[] _inventoryIconRects;
     GUIStyle _labelStyle;
     public Font labelFont;
     public Player player;
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour
 
     public LevelGenerator levelGenerator;
 
-    private GameDice _dice;
+    public GameDice Dice;
 
     private Texture2D MakeTex( int width, int height, Color col )
     {
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _dice = new GameDice();
+        Dice = new GameDice();
         _turnsPassed = 0;
 
         _labelRect = new Rect(10, 10, 180, 16);
@@ -50,7 +51,15 @@ public class GameManager : MonoBehaviour
         _labelStyle.normal.textColor = Color.white;
         _labelStyle.normal.background = MakeTex( 2, 2, new Color( 0f, 0f, 0f, 0.5f ) );
 
-        _inventoryRect = new Rect(200, 10, 320, 80);
+        _inventoryRect = new Rect(226, 10, 320, 80);
+        
+        // setup inventory icon rectangles
+        _inventoryIconRects = new Rect[6];
+        for (int i = 0; i < 6; i++)
+        {
+            _inventoryIconRects[i] = new Rect(200, 10 + (16 * i), 16, 16);
+        }
+        
         mobsOnScreen = FindObjectsOfType<Mob>();
 
         eventLog.logEvent("The Burrow Tale begins.");
@@ -214,7 +223,7 @@ public class GameManager : MonoBehaviour
     public void HurtPlayer(int dice)
     {
         eventLog.logEvent("A mob attacks you!");
-        int roll = _dice.Roll(6, dice);
+        int roll = Dice.Roll(6, dice);
         eventLog.logEvent(dice + "D6 ROLL: " + roll);
         eventLog.logEvent("You lost " + roll + " hp!");
         player.ChangeHealth(-roll);
@@ -223,7 +232,7 @@ public class GameManager : MonoBehaviour
     public void HurtMob(Mob target, int dice)
     {
         eventLog.logEvent("You attack the " + target.mobName + "!");
-        int roll = _dice.Roll(6, dice);
+        int roll = Dice.Roll(6, dice);
         eventLog.logEvent(dice + "D6 ROLL: " + roll);
         eventLog.logEvent("Hit " + target.mobName + " for " + roll + " hp!");
         target.ChangeHealth(-roll);
@@ -252,6 +261,15 @@ public class GameManager : MonoBehaviour
         Console.WriteLine("Found " + itemPickupsOnScreen.Count());
     }
 
+    // Thanks Imprity from Unity Forum
+    public static void GUIDrawSprite(Rect rect, Sprite sprite){
+        UnityEngine.Rect spriteRect = sprite.rect;
+        UnityEngine.Texture2D tex = sprite.texture;
+        GUI.DrawTextureWithTexCoords(rect, tex, 
+            new UnityEngine.Rect(spriteRect.x / tex.width, spriteRect.y / tex.height, 
+                spriteRect.width/ tex.width, spriteRect.height / tex.height));
+    }
+
     void OnGUI()
     {
         GUI.Box(_labelRect, "Turn " + _turnsPassed + "; HP: " + player.GetHealth()
@@ -260,11 +278,12 @@ public class GameManager : MonoBehaviour
         if (player.inventoryOpen)
         {
             string invList = "";
-            foreach (Item i in player.Inventory)
+            for (int i = 0; i < player.Inventory.Count(); i++)
             {
-                invList += i.Name + ":" + i.Description + ",\n";
+                Item it = player.Inventory[i];
+                invList += it.Name + ":" + it.Description + ",\n";
+                GUIDrawSprite(_inventoryIconRects[i], it.Icon);
             }
-
             GUI.Box(_inventoryRect, invList, _labelStyle);
         }
     }
