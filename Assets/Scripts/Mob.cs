@@ -90,7 +90,13 @@ public class Mob : MonoBehaviour
     // Move around randomly.
     public void Bumble()
     {
-
+        if (gameManager.Dice.Roll(20, 1) > 14)
+        {
+            Vector3 target = new Vector3(gameManager.Dice.Roll(1, 1),
+                gameManager.Dice.Roll(1, 1), 0);
+            if (gameManager.TileFree(transform.position + target))
+                transform.position += target;
+        }
     }
 
     // Determines and executes the mob's action this turn.
