@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -85,76 +83,6 @@ public class GameManager : MonoBehaviour
         Vector3 mobSpotVec = new Vector3(mobSpotArr[0] + 0.5f, mobSpotArr[1] + 0.5f, 0);
         Instantiate(levelGenerator.Mob, mobSpotVec, Quaternion.identity);
     }
-
-    // Uses a pathfinding algorithm to compute the shortest path from `from` to `to`.
-    // The path is returned as a queue, where each item is a step in the path, and the first
-    // item out is the first step the mob needs to take.
-    public Vector2[,] ShortestPath(Vector2 start, Vector2 end)
-    {
-        Queue<Vector2> q = new Queue<Vector2>();
-        
-        q.Enqueue(start);
-
-        bool[,] visited = new bool[80, 40];
-
-        for (int y = 0; y < 40; y++)
-        {
-            for (int x = 0; x < 80; x++)
-                visited[x, y] = false;
-        }
-        
-        Vector2[,] prev = new Vector2[80, 40];
-
-        while (q.Count > 0)
-        {
-            Vector2 node = q.Dequeue();
-            Vector2[] neighbours = GetNeighbours(node);
-
-            foreach (Vector2 next in neighbours)
-            {
-                if (!visited[(int) next.x, (int) next.y])
-                {
-                    q.Enqueue(next);
-                    visited[(int) next.x, (int) next.y] = true;
-                    prev[(int) next.x, (int) next.y] = node;
-                }
-            }
-        }
-
-        return prev;
-    }
-
-    private Vector2[] GetNeighbours(Vector2 tile)
-    {
-        return null;
-    }
-
-    private List<Vector2> ReconstructPath(Vector2 start, Vector2 end, Vector2[,] prev)
-    {
-        List<Vector2> path = new List<Vector2>();
-
-        Vector2 at = end;
-
-        while (path[path.Count] != start)
-        {
-            at = prev[(int)at.x, (int)at.y];
-        }
-        /*
-        for (Vector2 at = end; at != null; at = prev[(int)at.x, (int)at.y])
-        {
-            path.Add(at);
-        }*/
-
-        path.Reverse();
-        
-        if (path[0] == start)
-        {
-            return path;
-        }
-
-        return null;
-    }
-    
 
     public bool TileFree(Vector2 targetPos)
     {
@@ -281,6 +209,10 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < player.Inventory.Count(); i++)
             {
                 Item it = player.Inventory[i];
+                
+                if (player.selectedItem == i)
+                    invList += "SELECTED: ";
+
                 invList += it.Name + ":" + it.Description + ",\n";
                 GUIDrawSprite(_inventoryIconRects[i], it.Icon);
             }
