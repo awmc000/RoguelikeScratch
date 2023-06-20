@@ -82,7 +82,6 @@ public class Tree
         }   
     }
 
-    #if !UNITY_EDITOR
     // Prints a dungeon layout in ASCII to the terminal.
     // Used in testing with dungeontest.sh
     public void PrintMapArr(int[,] mapArr)
@@ -105,7 +104,6 @@ public class Tree
             Console.WriteLine();
         }
     }
-    #endif
 
     public int[,] MakeMapArr(List<Area> areaList)
     {
@@ -343,17 +341,16 @@ public class Tree
         arr[1] = y;
         return arr;
     }
-    
+    /*
     #if !UNITY_EDITOR
     /*
      * The main method is not used in the game itself, but is used for testing
      * the dungeon generation algorithm in a separate executable, compiled with
      * dungeontest.sh.
-     */
     public static void Main(string[] args)
     {
         Tree tree = new Tree();
         tree.PrintMapArr(tree.GenerateMap());
     }
-    #endif
+    */
 }
