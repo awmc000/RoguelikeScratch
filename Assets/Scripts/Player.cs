@@ -19,9 +19,16 @@ public class Player : MonoBehaviour
     public AudioSource attackSound;
 
     public List<Item> Inventory;
-    
-    // Interface booleans
+    public int selectedItem = 0;
+    // Interface
     public bool inventoryOpen;
+    public enum InputMode
+    {
+        Movement,
+        Inventory,
+        Looking
+    }
+    public InputMode mode = InputMode.Movement;
     
     // Setters and getters
     public int GetHealth()
@@ -84,6 +91,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad2))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad2));
+                selectedItem = (selectedItem + 1) % Inventory.Count;
                 return;
             }
 
@@ -143,50 +151,74 @@ public class Player : MonoBehaviour
         {
             // N
             case KeyCode.Keypad8:
-                _movementVector.Set(0.0f, 1.0f, 0.0f);
-                _targetPosition += Vector2.up;
+                if (mode == InputMode.Movement)
+                {
+                    _movementVector.Set(0.0f, 1.0f, 0.0f);
+                    _targetPosition += Vector2.up;
+                }
                 break;
 
             // NW
             case KeyCode.Keypad7:
-                _movementVector.Set(-1.0f, 1.0f, 0.0f);
-                _targetPosition += Vector2.up + Vector2.left;
+                if (mode == InputMode.Movement)
+                {
+                    _movementVector.Set(-1.0f, 1.0f, 0.0f);
+                    _targetPosition += Vector2.up + Vector2.left;
+                }
                 break;
 
             // NE
             case KeyCode.Keypad9:
-                _movementVector.Set(1.0f, 1.0f, 0.0f);
-                _targetPosition += Vector2.up + Vector2.right;
+                if (mode == InputMode.Movement)
+                {
+                    _movementVector.Set(1.0f, 1.0f, 0.0f);
+                    _targetPosition += Vector2.up + Vector2.right;
+                }
                 break;
 
             // S
             case KeyCode.Keypad2:
-                _movementVector.Set(0.0f, -1.0f, 0.0f);
-                _targetPosition += Vector2.down;
+                if (mode == InputMode.Movement)
+                {
+                    _movementVector.Set(0.0f, -1.0f, 0.0f);
+                    _targetPosition += Vector2.down;
+                }
                 break;
 
             // SW
             case KeyCode.Keypad1:
-                _movementVector.Set(-1.0f, -1.0f, 0.0f);
-                _targetPosition += Vector2.down + Vector2.left;
+                if (mode == InputMode.Movement)
+                {
+                    _movementVector.Set(-1.0f, -1.0f, 0.0f);
+                    _targetPosition += Vector2.down + Vector2.left;
+                }
                 break;
 
             // SE
             case KeyCode.Keypad3:
-                _movementVector.Set(1.0f, -1.0f, 0.0f);
-                _targetPosition += Vector2.down + Vector2.right;
+                if (mode == InputMode.Movement)
+                {
+                    _movementVector.Set(1.0f, -1.0f, 0.0f);
+                    _targetPosition += Vector2.down + Vector2.right;
+                }
                 break;
 
             // W
             case KeyCode.Keypad4:
-                _movementVector.Set(-1.0f, 0.0f, 0.0f);
-                _targetPosition += Vector2.left;
+                if (mode == InputMode.Movement)
+                {
+                    _movementVector.Set(-1.0f, 0.0f, 0.0f);
+                    _targetPosition += Vector2.left;
+                }
                 break;
 
             // E
             case KeyCode.Keypad6:
-                _movementVector.Set(1.0f, 0.0f, 0.0f);
-                _targetPosition += Vector2.right;
+                if (mode == InputMode.Movement)
+                {
+                    _movementVector.Set(1.0f, 0.0f, 0.0f);
+                    _targetPosition += Vector2.right;
+                }
                 break;
 
             // WAIT
@@ -201,6 +233,15 @@ public class Player : MonoBehaviour
             // TOGGLE INVENTORY MENU
             case KeyCode.I:
                 inventoryOpen = !inventoryOpen;
+                if (mode == InputMode.Inventory)
+                {
+                    mode = InputMode.Movement;
+                }
+                else
+                {
+                    mode = InputMode.Inventory;
+                }
+
                 break;
         }
 
