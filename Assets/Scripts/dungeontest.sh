@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mcs Area.cs TreeNode.cs Tree.cs ; ./Area.exe
+mcs Area.cs TreeNode.cs Tree.cs Pathfinder.cs ; ./Area.exe
