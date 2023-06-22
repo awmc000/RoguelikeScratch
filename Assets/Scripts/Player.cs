@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     {
         Mob targetMob = gameManager.GetMobAtTile(_targetPosition);
         gameManager.HurtMob(targetMob, attackDamage);
+        attackSound.Play();
     }
 
     // Start is called before the first frame update
@@ -91,7 +92,8 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad2))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad2));
-                selectedItem = (selectedItem + 1) % Inventory.Count;
+                if (inventoryOpen && Inventory.Count > 1)
+                    selectedItem = (selectedItem + 1) % Inventory.Count;
                 return;
             }
 
@@ -141,12 +143,23 @@ public class Player : MonoBehaviour
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.I));
             }
+            
+            // TODO: toggle "Look" mode
+            /*
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                StartCoroutine(DebounceCoroutine(Keycode.K));
+            }
+             */
         }
 
     }
 
     IEnumerator DebounceCoroutine(KeyCode key)
     {
+        // If the player moves or attacks, advance the turn counter.
+        // HUD manipulations can be done indefinitely in the same turn.
+        bool advancedTurn = false;
         switch (key)
         {
             // N
@@ -155,6 +168,7 @@ public class Player : MonoBehaviour
                 {
                     _movementVector.Set(0.0f, 1.0f, 0.0f);
                     _targetPosition += Vector2.up;
+                    advancedTurn = true;
                 }
                 break;
 
@@ -164,6 +178,7 @@ public class Player : MonoBehaviour
                 {
                     _movementVector.Set(-1.0f, 1.0f, 0.0f);
                     _targetPosition += Vector2.up + Vector2.left;
+                    advancedTurn = true;
                 }
                 break;
 
@@ -173,6 +188,7 @@ public class Player : MonoBehaviour
                 {
                     _movementVector.Set(1.0f, 1.0f, 0.0f);
                     _targetPosition += Vector2.up + Vector2.right;
+                    advancedTurn = true;
                 }
                 break;
 
@@ -182,6 +198,7 @@ public class Player : MonoBehaviour
                 {
                     _movementVector.Set(0.0f, -1.0f, 0.0f);
                     _targetPosition += Vector2.down;
+                    advancedTurn = true;
                 }
                 break;
 
@@ -191,6 +208,7 @@ public class Player : MonoBehaviour
                 {
                     _movementVector.Set(-1.0f, -1.0f, 0.0f);
                     _targetPosition += Vector2.down + Vector2.left;
+                    advancedTurn = true;
                 }
                 break;
 
@@ -200,6 +218,7 @@ public class Player : MonoBehaviour
                 {
                     _movementVector.Set(1.0f, -1.0f, 0.0f);
                     _targetPosition += Vector2.down + Vector2.right;
+                    advancedTurn = true;
                 }
                 break;
 
@@ -209,6 +228,7 @@ public class Player : MonoBehaviour
                 {
                     _movementVector.Set(-1.0f, 0.0f, 0.0f);
                     _targetPosition += Vector2.left;
+                    advancedTurn = true;
                 }
                 break;
 
@@ -218,11 +238,13 @@ public class Player : MonoBehaviour
                 {
                     _movementVector.Set(1.0f, 0.0f, 0.0f);
                     _targetPosition += Vector2.right;
+                    advancedTurn = true;
                 }
                 break;
 
             // WAIT
             case KeyCode.Keypad5:
+                advancedTurn = true;
                 break;
 
             // GRAB ITEM
@@ -260,7 +282,8 @@ public class Player : MonoBehaviour
         _movementVector.Set(0.0f, 0.0f, 0.0f);
         _targetPosition = transform.localPosition;
 
-        gameManager.FinishTurn();
+        if (advancedTurn)
+            gameManager.FinishTurn();
 
         yield return new WaitForSeconds(0.125f);
 
@@ -285,6 +308,7 @@ public class Player : MonoBehaviour
         if (_currentHealth <= 0)
         {
             gameManager.GameOver();
+            this.gameObject.SetActive(false);
         }
     }
 }
