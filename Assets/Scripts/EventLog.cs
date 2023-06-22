@@ -29,7 +29,7 @@ public class EventLog : MonoBehaviour
     {
         _eventList = new List<string>();
 
-        _labelRect = new Rect(10, Screen.height - 90, 180, 480);
+        _labelRect = new Rect(10, Screen.height - 180, 180, 480);
         _labelStyle = new GUIStyle();
         _labelStyle.font = labelFont;
         _labelStyle.fontSize = 16;
@@ -50,7 +50,7 @@ public class EventLog : MonoBehaviour
     {
         string fullReport = "";
         
-        if (_eventList.Count <= 5)
+        if (_eventList.Count <= 10)
         {
             foreach (string eventString in _eventList)
             {
@@ -59,7 +59,7 @@ public class EventLog : MonoBehaviour
         }
         else
         {
-            for (int i = 5; i >= 1; i--)
+            for (int i = 10; i >= 1; i--)
             {
                 fullReport += _eventList[_eventList.Count - i] + "\n";
             }
