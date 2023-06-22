@@ -8,8 +8,13 @@ using System.Collections.Generic;
  */
 public class Pathfinder
 {
+    // 2D array of ints where value represents wall or floor.
     private int[,] _mapArr;
-    private int _mapSize; // number of floor tiles
+    
+    // Number of floor tiles, counted at construction.
+    private int _mapSize; 
+    
+    // Maps x, y coordinates to indices in the array used to mark tiles as visited.
     private Dictionary<IntVec2, int> _coordToIndex;
 
     public Pathfinder(int[,] mapArr)
@@ -92,15 +97,15 @@ public class Pathfinder
         {
             curr = q.Dequeue();
             // visit curr
-            Console.WriteLine("Going to try to access visited [ " + _coordToIndex[curr] + " ]. ");
-            Console.WriteLine("Does _coordToIndex have it: " + _coordToIndex.ContainsKey(curr));
-            Console.WriteLine("Does visited have that many indices? its size is: " + visited.Length);
+            //Console.WriteLine("Going to try to access visited [ " + _coordToIndex[curr] + " ]. ");
+            //Console.WriteLine("Does _coordToIndex have it: " + _coordToIndex.ContainsKey(curr));
+            //Console.WriteLine("Does visited have that many indices? its size is: " + visited.Length);
             visited[_coordToIndex[curr]] = true;
             
             // iterate through the neighbours, adding any unmarked to the queue
-            for (int y = curr.Y - 1; y <= curr.Y + 1; y++)
+            for (int y = curr.Y - 1; y <= (curr.Y + 1) % Tree.DungeonHeight; y++)
             {
-                for (int x = curr.X - 1; x <= curr.X + 1; x++)
+                for (int x = curr.X - 1; x <= (curr.X + 1) % Tree.DungeonWidth; x++)
                 {
                     // Skip an x, y which exceeds the bounds.
                     if (x > Tree.DungeonWidth - 1 || x < 0)
@@ -125,8 +130,13 @@ public class Pathfinder
                         }
                         else
                         {
+                            Console.WriteLine("Going to try to access visited [ " + _coordToIndex[neighbour] + " ]. ");
+                            Console.WriteLine("Does _coordToIndex have it: " + _coordToIndex.ContainsKey(neighbour));
+                            Console.WriteLine("Does visited have that many indices? its size is: " + visited.Length);
                             if (!visited[_coordToIndex[neighbour]])
                             {
+                                Console.WriteLine("Found that " + neighbour.X + ", " + neighbour.Y +
+                                                  "was not visited, marking.");
                                 q.Enqueue(neighbour);
                                 visited[_coordToIndex[neighbour]] = true;
                                 prev.TryAdd(neighbour, curr);
