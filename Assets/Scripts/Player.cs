@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
     public AudioSource attackSound;
 
     public List<Item> Inventory;
+    public int money = 0;
     public int selectedItem = 0;
     // Interface
     public bool inventoryOpen;
@@ -142,6 +144,17 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.I))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.I));
+            }
+
+            // use selected item
+            if (Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                if (inventoryOpen)
+                {
+                    UseItem(Inventory[selectedItem]);
+                    Inventory.Remove(Inventory[selectedItem]);
+                    selectedItem = 0;
+                }
             }
             
             // TODO: toggle "Look" mode
@@ -290,6 +303,13 @@ public class Player : MonoBehaviour
         _debouncing = false;
     }
 
+    private void UseItem(Item item)
+    {
+        if (item.Stats.ContainsKey("hp"))
+        {
+            _currentHealth += item.Stats["hp"];
+        }
+    }
     private void PickupItem()
     {
         ItemPickup itemPickup = gameManager.GetItemPickupAtTile(transform.position);

@@ -166,7 +166,11 @@ public class GameManager : MonoBehaviour
         target.ChangeHealth(-roll);
         if (target.currentHealth <= 0)
         {
+            Instantiate(target.drop, target.transform.position, Quaternion.identity);
             target.transform.gameObject.SetActive(false);
+            int newMoney = Dice.Roll(6, target.lootMultiplier);
+            player.money += newMoney;
+            eventLog.logEvent("Got " + newMoney + " coins.");
             //Destroy(target.transform.GetChild(0).gameObject);
             //Destroy(target);
             UpdateMobsList();
@@ -205,7 +209,7 @@ public class GameManager : MonoBehaviour
 
         if (player.inventoryOpen)
         {
-            string invList = "";
+            string invList = "[" + player.money + " coins.]\n";
             for (int i = 0; i < player.Inventory.Count(); i++)
             {
                 Item it = player.Inventory[i];

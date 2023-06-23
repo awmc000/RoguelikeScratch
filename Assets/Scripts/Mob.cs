@@ -16,6 +16,9 @@ public class Mob : MonoBehaviour
     public int followDistance;
     int _followCounter;
     
+    // Item drops
+    public ItemPickup drop;
+    
     // Number of d6 rolled for gold drop.
     public int lootMultiplier;
     public GameManager gameManager;

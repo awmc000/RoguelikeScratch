@@ -45,7 +45,6 @@
      <Compile Include="Assets/Scripts/TreeNode.cs" />
      <Compile Include="Assets/Scripts/Area.cs" />
      <Compile Include="Assets/Scripts/LevelGenerator.cs" />
-     <Compile Include="Assets/Scripts/Pathfinder.cs" />
      <Compile Include="Assets/Scripts/Tree.cs" />
      <Compile Include="Assets/Scripts/GameDice.cs" />
      <Compile Include="Assets/Scripts/EventLog.cs" />
