@@ -133,12 +133,12 @@ public class Pathfinder
                             Console.WriteLine("Going to try to access visited [ " + _coordToIndex[neighbour] + " ]. ");
                             Console.WriteLine("Does _coordToIndex have it: " + _coordToIndex.ContainsKey(neighbour));
                             Console.WriteLine("Does visited have that many indices? its size is: " + visited.Length);
-                            if (!visited[_coordToIndex[neighbour]])
+                            if (!visited[_coordToIndex[neighbour] - 1])
                             {
                                 Console.WriteLine("Found that " + neighbour.X + ", " + neighbour.Y +
                                                   "was not visited, marking.");
                                 q.Enqueue(neighbour);
-                                visited[_coordToIndex[neighbour]] = true;
+                                visited[_coordToIndex[neighbour] - 1] = true;
                                 prev.TryAdd(neighbour, curr);
                             }
                         }
