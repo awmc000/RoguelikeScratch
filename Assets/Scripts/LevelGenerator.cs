@@ -16,37 +16,14 @@ public class LevelGenerator : MonoBehaviour
     // Data members
     public Tilemap floorMap;
     public Tilemap wallMap;
-    
-    // floor tiles
-    /*public Tile floorTileTopLeft;
-    public Tile floorTileTopCentre;
-    public Tile floorTileTopRight;
-    
-    public Tile floorTileCentreLeft;*/
+
     public Tile floorTile;
-    /*public Tile floorTileCentreRight;
-
-    public Tile floorTileBottomLeft;
-    public Tile floorTileBottomCentre;
-    public Tile floorTileBottomRight;*/
-    
-    // wall tiles
-    /*public Tile wallTileTopLeft;
-    public Tile wallTileTopCentre;
-    public Tile wallTileTopRight;
-    
-    public Tile wallTileCentreLeft;*/
     public Tile wallTile;
-    /*public Tile wallTileCentreRight;
 
-    public Tile wallTileBottomLeft;
-    public Tile wallTileBottomCentre;
-    public Tile wallTileBottomRight;*/
     public Tree BinaryTree = new Tree();
 
     public GameObject Mob;
 
-    public int floorTiles = 0;
     // private members
     private int[,] _mapArray;
 
@@ -110,27 +87,15 @@ public class LevelGenerator : MonoBehaviour
                 switch (_mapArray[x, y])
                 {
                     case 0: // wall
-                        /*
-                        if (((x < Tree.DungeonWidth - 1 && y < Tree.DungeonHeight - 1) &&
-                            (x > 0 && y > 0)) 
-                            && TouchesFloor(x, y))
-                        */
                         if (TouchesFloor(x,y))
                             wallMap.SetTile(position, wallTile);
                         break;
                     case 1: // floor
                         floorMap.SetTile(position, floorTile);
-                        floorTiles++;
                         break;
 
                 }
             }
         }
-        
-        // set up position vector of the bottom left point
-        //Vector3Int roomPos = new Vector3Int(x, y, 0);
-        // floors first
-        //floorMap.BoxFill(roomPos, floorTile, roomPos.x, roomPos.y,
-        //    roomPos.x + width, roomPos.y + height);
     }
 }
