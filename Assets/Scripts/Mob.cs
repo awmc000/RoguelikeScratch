@@ -9,6 +9,15 @@ public class Mob : MonoBehaviour
     public int currentHealth;
     public int sightRadius;
     public int attackDamage;
+
+    // If `tiresOut` is true, the mob will follow the player for
+    // followDistance steps before giving up.
+    public bool tiresOut;
+    public int followDistance;
+    int _followCounter;
+    
+    // Number of d6 rolled for gold drop.
+    public int lootMultiplier;
     public GameManager gameManager;
 
     Vector2 _targetPos;
@@ -42,7 +51,8 @@ public class Mob : MonoBehaviour
     public void moveToPlayer()
     {
         Vector2 playerPos = gameManager.GetPlayerPos();
-        _targetPos = transform.position;
+        Vector2 myPos = transform.position;
+        _targetPos = new Vector2(myPos.x, myPos.y);
         // Find whether to travel west, east, or neither
         float distX = playerPos.x - _targetPos.x;
         // if negative, mob -> player (mob needs to go east)
@@ -71,8 +81,27 @@ public class Mob : MonoBehaviour
         if (gameManager.TileFree(_targetPos))
         {
             transform.localPosition = _targetPos;
+            FollowIncrement();
+        }
+        // Try making only the horizontal change
+        else if (gameManager.TileFree(new Vector2(_targetPos.x, transform.position.y)))
+        {
+            transform.localPosition = new Vector2(_targetPos.x, transform.position.y);
+            FollowIncrement();
+        }
+        // Try making only the vertical change
+        else if (gameManager.TileFree(new Vector2(transform.position.x, _targetPos.y)))
+        {
+            transform.localPosition = new Vector2(transform.position.x, _targetPos.y);
+            FollowIncrement();
         }
 
+    }
+
+    private void FollowIncrement()
+    {
+        if (tiresOut)
+            _followCounter++;
     }
 
     // is the player in sight?
@@ -109,7 +138,7 @@ public class Mob : MonoBehaviour
             return;
         }
         // Second priority: Walk toward the player if they are in sight radius.
-        if (inSight())
+        if (inSight() && (!tiresOut || _followCounter < followDistance))
         {
             moveToPlayer();
             return;
@@ -124,6 +153,8 @@ public class Mob : MonoBehaviour
     {
         _targetPos = new Vector2(0.0f, 0.0f);
         currentHealth = maxHealth;
+        if (tiresOut)
+            _followCounter = 0;
     }
 
 }
