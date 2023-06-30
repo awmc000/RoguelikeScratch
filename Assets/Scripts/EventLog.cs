@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class EventLog : MonoBehaviour
@@ -10,6 +11,7 @@ public class EventLog : MonoBehaviour
     Rect _labelRect;
     GUIStyle _labelStyle;
     public Font labelFont;
+    private StreamWriter _writer;
 
     private Texture2D MakeTex( int width, int height, Color col )
     {
@@ -36,13 +38,29 @@ public class EventLog : MonoBehaviour
         _labelStyle.normal.textColor = Color.white;
         _labelStyle.normal.background = MakeTex( 2, 2, new Color( 0f, 0f, 0f, 0.5f ) );
 
-
-        logEvent("Set up the EventLog.");
+        // Set up the log text file
+        string path = Application.persistentDataPath + "/" + System.DateTime.Now.ToString() + " Log";
+        _writer = new StreamWriter(path);
+        LogEvent("File path for log is " + path);
+        _writer.WriteLine("Created StreamWriter.");
+        
+        LogEvent("Set up the EventLog.");
     }
 
-    public void logEvent(string eventString)
+    public void LogEvent(string eventString)
     {
+        // write to ingame event log
         _eventList.Add(eventString);
+        
+        // write to text file
+        _writer.WriteLine(eventString);
+        
+        Debug.Log("Logged event: " + eventString);
+    }
+
+    public void CloseWriter()
+    {
+        _writer.Close();
     }
 
     // Update is called once per frame
@@ -66,5 +84,10 @@ public class EventLog : MonoBehaviour
         }
 
         GUI.Box(_labelRect, fullReport, _labelStyle);
+    }
+
+    void OnDestroy()
+    {
+        _writer.Close();
     }
 }

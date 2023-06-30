@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
         
         mobsOnScreen = FindObjectsOfType<Mob>();
 
-        eventLog.logEvent("The Burrow Tale begins.");
+        eventLog.LogEvent("The Burrow Tale begins.");
 
         levelGenerator.GenerateLevel();
 
@@ -150,19 +150,19 @@ public class GameManager : MonoBehaviour
 
     public void HurtPlayer(int dice)
     {
-        eventLog.logEvent("A mob attacks you!");
+        eventLog.LogEvent("A mob attacks you!");
         int roll = Dice.Roll(6, dice);
-        eventLog.logEvent(dice + "D6 ROLL: " + roll);
-        eventLog.logEvent("You lost " + roll + " hp!");
+        eventLog.LogEvent(dice + "D6 ROLL: " + roll);
+        eventLog.LogEvent("You lost " + roll + " hp!");
         player.ChangeHealth(-roll);
     }
 
     public void HurtMob(Mob target, int dice)
     {
-        eventLog.logEvent("You attack the " + target.mobName + "!");
+        eventLog.LogEvent("You attack the " + target.mobName + "!");
         int roll = Dice.Roll(6, dice);
-        eventLog.logEvent(dice + "D6 ROLL: " + roll);
-        eventLog.logEvent("Hit " + target.mobName + " for " + roll + " hp!");
+        eventLog.LogEvent(dice + "D6 ROLL: " + roll);
+        eventLog.LogEvent("Hit " + target.mobName + " for " + roll + " hp!");
         target.ChangeHealth(-roll);
         if (target.currentHealth <= 0)
         {
@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour
             target.transform.gameObject.SetActive(false);
             int newMoney = Dice.Roll(6, target.lootMultiplier);
             player.money += newMoney;
-            eventLog.logEvent("Got " + newMoney + " coins.");
+            eventLog.LogEvent("Got " + newMoney + " coins.");
             //Destroy(target.transform.GetChild(0).gameObject);
             //Destroy(target);
             UpdateMobsList();
@@ -241,8 +241,8 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        eventLog.logEvent("You died!");
-        Destroy(player);
+        eventLog.LogEvent("You died!");
+        eventLog.CloseWriter();
     }
 
 }

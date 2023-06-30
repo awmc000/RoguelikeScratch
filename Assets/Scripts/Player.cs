@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     public int selectedItem = 0;
     // Interface
     public bool inventoryOpen;
+    public bool hitEscapeLast;
     public enum InputMode
     {
         Movement,
@@ -69,10 +70,11 @@ public class Player : MonoBehaviour
     {
         if (!_debouncing)
         {
-            // up, north
+            // north
             if (Input.GetKeyDown(KeyCode.Keypad8))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad8));
+                hitEscapeLast = false;
                 return;
             }
 
@@ -80,6 +82,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad7))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad7));
+                hitEscapeLast = false;
                 return;
             }
 
@@ -87,6 +90,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad9))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad9));
+                hitEscapeLast = false;
                 return;
             }
             
@@ -96,6 +100,7 @@ public class Player : MonoBehaviour
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad2));
                 if (inventoryOpen && Inventory.Count > 1)
                     selectedItem = (selectedItem + 1) % Inventory.Count;
+                hitEscapeLast = false;
                 return;
             }
 
@@ -103,6 +108,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad1))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad1));
+                hitEscapeLast = false;
                 return;
             }
 
@@ -110,6 +116,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad3))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad3));
+                hitEscapeLast = false;
                 return;
             }
             
@@ -117,6 +124,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad4))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad4));
+                hitEscapeLast = false;
                 return;
             }
 
@@ -124,6 +132,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad6))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad6));
+                hitEscapeLast = false;
                 return;
             }
 
@@ -131,6 +140,7 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Keypad5))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.Keypad5));
+                hitEscapeLast = false;
                 return;
             }
             
@@ -138,23 +148,27 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.G))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.G));
+                hitEscapeLast = false;
             }
             
             // toggle inventory menu
             if (Input.GetKeyDown(KeyCode.I))
             {
                 StartCoroutine(DebounceCoroutine(KeyCode.I));
+                hitEscapeLast = false;
             }
 
             // use selected item
             if (Input.GetKeyDown(KeyCode.KeypadEnter))
             {
-                if (inventoryOpen)
-                {
-                    UseItem(Inventory[selectedItem]);
-                    Inventory.Remove(Inventory[selectedItem]);
-                    selectedItem = 0;
-                }
+                StartCoroutine(DebounceCoroutine(KeyCode.KeypadEnter));
+                hitEscapeLast = false;
+            }
+
+            // hit escape twice to quit
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                StartCoroutine(DebounceCoroutine(KeyCode.Escape));
             }
             
             // TODO: toggle "Look" mode
@@ -276,6 +290,29 @@ public class Player : MonoBehaviour
                 {
                     mode = InputMode.Inventory;
                 }
+                break;
+            
+            // USE INVENTORY ITEM
+            case KeyCode.KeypadEnter:
+                if (inventoryOpen)
+                {
+                    UseItem(Inventory[selectedItem]);
+                    Inventory.Remove(Inventory[selectedItem]);
+                    selectedItem = 0;
+                }
+                break;
+            
+            case KeyCode.Escape:
+                if (hitEscapeLast)
+                {
+                    gameManager.eventLog.LogEvent("Exiting the game.");
+                    SceneManager.LoadScene("MainMenu");
+                }
+                else
+                {
+                    gameManager.eventLog.LogEvent("Hit ESC again to exit the game.");
+                    hitEscapeLast = true;
+                }
 
                 break;
         }
@@ -307,14 +344,27 @@ public class Player : MonoBehaviour
     {
         if (item.Stats.ContainsKey("hp"))
         {
-            _currentHealth += item.Stats["hp"];
+            _currentHealth = _currentHealth + item.Stats["hp"] % (maxHealth + 1);
+            gameManager.eventLog.LogEvent("Restored " + item.Stats["hp"] + " hp.");
+        }
+
+        if (item.Stats.ContainsKey("dmg"))
+        {
+            attackDamage += item.Stats["dmg"];
+            gameManager.eventLog.LogEvent("Increased damage by " + item.Stats["dmg"] + ".");
+        }
+
+        if (item.Flags.ContainsKey("teleport") && item.Flags["teleport"])
+        {
+            int[] gopt = gameManager.levelGenerator.BinaryTree.GetEntitySpot();
+            transform.position = new Vector3((float)gopt[0] + 0.5f, (float)gopt[1] + 0.5f, 0f);
         }
     }
     private void PickupItem()
     {
         ItemPickup itemPickup = gameManager.GetItemPickupAtTile(transform.position);
         Item item = itemPickup.GetItem();
-        gameManager.eventLog.logEvent("Picked up " + item.Name + ".");
+        gameManager.eventLog.LogEvent("Picked up " + item.Name + ".");
         itemPickup.transform.gameObject.SetActive(false);
         Inventory.Add(item);
     }
@@ -328,7 +378,7 @@ public class Player : MonoBehaviour
         if (_currentHealth <= 0)
         {
             gameManager.GameOver();
-            this.gameObject.SetActive(false);
+            //this.gameObject.SetActive(false);
         }
     }
 }
