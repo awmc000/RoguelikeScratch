@@ -47,6 +47,7 @@
      <Compile Include="Assets/Scripts/LevelGenerator.cs" />
      <Compile Include="Assets/Scripts/Tree.cs" />
      <Compile Include="Assets/Scripts/GameDice.cs" />
+     <Compile Include="Assets/ResolutionButton.cs" />
      <Compile Include="Assets/Scripts/MenuBackgroundWalkingAnt.cs" />
      <Compile Include="Assets/Scripts/EventLog.cs" />
      <Compile Include="Assets/Scripts/GameManager.cs" />
@@ -54,7 +55,6 @@
      <Compile Include="Assets/Scripts/Mob.cs" />
      <Compile Include="Assets/Scripts/Player.cs" />
      <Compile Include="Assets/Scripts/NewGameButton.cs" />
-     <Compile Include="Assets/ResolutionButton.cs" />
      <Folder Include="Assets" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Overlay.shader" />

@@ -13,4 +13,12 @@ public class NewGameButton : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public bool settingsOpen = false;
+
+    public void OnToggleSettings()
+    {
+        settingsOpen = !settingsOpen;
+        GameObject resolutionButtons = GameObject.Find("ResolutionButtons");
+    }
 }
