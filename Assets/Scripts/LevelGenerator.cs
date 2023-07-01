@@ -23,6 +23,8 @@ public class LevelGenerator : MonoBehaviour
     public Tree BinaryTree = new Tree();
 
     public GameObject Mob;
+    public List<GameObject> MobList;
+    public  List<GameObject> InstantiatedMobsList = new List<GameObject>();
 
     // private members
     private int[,] _mapArray;
@@ -71,7 +73,11 @@ public class LevelGenerator : MonoBehaviour
     public void GenerateLevel()
     {
         // Set up a binary tree and use it to generate the level.
-        //Tree binaryTree = new Tree();
+        BinaryTree = new Tree();
+
+        // Clear tiles in case we aren't on the first level
+        floorMap.ClearAllTiles();
+        wallMap.ClearAllTiles();
         
         // Get an int array from the binary tree.
         _mapArray = BinaryTree.GenerateMap();

@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     
     public AudioSource attackSound;
 
+    public bool dead = false;
+
     public List<Item> Inventory;
     public int money = 0;
     public int selectedItem = 0;
@@ -375,8 +377,9 @@ public class Player : MonoBehaviour
         HandleInput();
 
         // check if I'm dead!
-        if (_currentHealth <= 0)
+        if (_currentHealth <= 0 && !dead)
         {
+            dead = true;
             gameManager.GameOver();
             //this.gameObject.SetActive(false);
         }

@@ -18,10 +18,14 @@ public class GameManager : MonoBehaviour
 
     public Mob[] mobsOnScreen;
     public ItemPickup[] itemPickupsOnScreen;
+    public GameObject tunnel;
+    private GameObject _oldTunnel;
 
     public LevelGenerator levelGenerator;
 
     public GameDice Dice;
+
+    public int Level;
 
     private Texture2D MakeTex( int width, int height, Color col )
     {
@@ -62,26 +66,50 @@ public class GameManager : MonoBehaviour
 
         eventLog.LogEvent("The Burrow Tale begins.");
 
-        levelGenerator.GenerateLevel();
-
-        PlacePlayer();
-
-        CreateMob();
-        CreateMob();
-        CreateMob();
+        Level = 0;
+        
+        CreateLevel();
     }
 
+    private int HowManyMobs()
+    {
+        return (int) Math.Round(0.9 * Level + 2);
+    }
+    public void CreateLevel()
+    {
+        Level++;
+        levelGenerator.GenerateLevel();
+
+        // TODO: Get rid of old mobs
+        for (int i = 0; i < levelGenerator.InstantiatedMobsList.Count(); i++)
+            Destroy(levelGenerator.InstantiatedMobsList[i]);
+        
+        // Place gate to the next level
+        _oldTunnel = tunnel;
+        int[] tunnelPosArr = levelGenerator.BinaryTree.GetEntitySpot();
+        Vector3 tunnelPos = new Vector3(tunnelPosArr[0] + 0.5f, tunnelPosArr[1] + 0.5f, 0);
+        tunnel = Instantiate(tunnel, tunnelPos, Quaternion.identity);
+        Destroy(_oldTunnel);
+        
+        PlacePlayer();
+
+        for (int i = 0; i < HowManyMobs(); i++)
+            levelGenerator.InstantiatedMobsList.Add(CreateMob());
+    }
     private void PlacePlayer()
     {
         int[] playerPos = levelGenerator.BinaryTree.GetEntitySpot();
         Vector3 playerPosVec = new Vector3(playerPos[0] + 0.5f, playerPos[1] + 0.5f, 0);
         player.transform.position = playerPosVec;
     }
-    private void CreateMob()
+    private GameObject CreateMob()
     {
         int[] mobSpotArr = levelGenerator.BinaryTree.GetEntitySpot();
         Vector3 mobSpotVec = new Vector3(mobSpotArr[0] + 0.5f, mobSpotArr[1] + 0.5f, 0);
-        Instantiate(levelGenerator.Mob, mobSpotVec, Quaternion.identity);
+
+        int whichMob = Dice.Roll(levelGenerator.MobList.Count(), 1) - 1;
+        GameObject mob = levelGenerator.MobList[whichMob];
+        return Instantiate(mob, mobSpotVec, Quaternion.identity);
     }
 
     public bool TileFree(Vector2 targetPos)
@@ -96,6 +124,10 @@ public class GameManager : MonoBehaviour
         return ((!wallTile) && (!mobThere));
     }
 
+    public bool TunnelAtTile(Vector2 targetPos)
+    {
+        return (Vector2)tunnel.transform.position == targetPos;
+    }
     public bool MobAtTile(Vector2 targetPos)
     {
         UpdateMobsList();
@@ -171,8 +203,6 @@ public class GameManager : MonoBehaviour
             int newMoney = Dice.Roll(6, target.lootMultiplier);
             player.money += newMoney;
             eventLog.LogEvent("Got " + newMoney + " coins.");
-            //Destroy(target.transform.GetChild(0).gameObject);
-            //Destroy(target);
             UpdateMobsList();
         }
     }
