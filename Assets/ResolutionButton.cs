@@ -9,4 +9,9 @@ public class ResolutionButton : MonoBehaviour
     {
         Screen.SetResolution(width, height, false);
     }
+
+    public void ToggleFullScreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+    }
 }
