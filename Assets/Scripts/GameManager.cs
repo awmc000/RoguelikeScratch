@@ -64,11 +64,16 @@ public class GameManager : MonoBehaviour
         
         mobsOnScreen = FindObjectsOfType<Mob>();
 
-        eventLog.LogEvent("The Burrow Tale begins.");
+        LogEvent("The Burrow Tale begins.");
 
         Level = 0;
         
         CreateLevel();
+    }
+
+    private void LogEvent(string eventString)
+    {
+        eventLog.LogEvent("[" + _turnsPassed + "]: " + eventString);
     }
 
     private int HowManyMobs()
@@ -182,19 +187,19 @@ public class GameManager : MonoBehaviour
 
     public void HurtPlayer(int dice)
     {
-        eventLog.LogEvent("A mob attacks you!");
+        LogEvent("A mob attacks you!");
         int roll = Dice.Roll(6, dice);
-        eventLog.LogEvent(dice + "D6 ROLL: " + roll);
-        eventLog.LogEvent("You lost " + roll + " hp!");
+        LogEvent(dice + "D6 ROLL: " + roll);
+        LogEvent("You lost " + roll + " hp!");
         player.ChangeHealth(-roll);
     }
 
     public void HurtMob(Mob target, int dice)
     {
-        eventLog.LogEvent("You attack the " + target.mobName + "!");
+        LogEvent("You attack the " + target.mobName + "!");
         int roll = Dice.Roll(6, dice);
-        eventLog.LogEvent(dice + "D6 ROLL: " + roll);
-        eventLog.LogEvent("Hit " + target.mobName + " for " + roll + " hp!");
+        LogEvent(dice + "D6 ROLL: " + roll);
+        LogEvent("Hit " + target.mobName + " for " + roll + " hp!");
         target.ChangeHealth(-roll);
         if (target.currentHealth <= 0)
         {
@@ -239,7 +244,7 @@ public class GameManager : MonoBehaviour
 
         if (player.inventoryOpen)
         {
-            string invList = "[" + player.money + " coins.]\n";
+            string invList = "";
             for (int i = 0; i < player.Inventory.Count(); i++)
             {
                 Item it = player.Inventory[i];
@@ -250,6 +255,7 @@ public class GameManager : MonoBehaviour
                 invList += it.Name + ":" + it.Description + ",\n";
                 GUIDrawSprite(_inventoryIconRects[i], it.Icon);
             }
+            invList += "[" + player.money + " coins.]\n";
             GUI.Box(_inventoryRect, invList, _labelStyle);
         }
     }
