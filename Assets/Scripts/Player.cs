@@ -280,11 +280,14 @@ public class Player : MonoBehaviour
             // WAIT
             case KeyCode.Keypad5:
                 advancedTurn = true;
+                if (gameManager.TunnelAtTile(transform.position))
+                    gameManager.CreateLevel();
                 break;
 
             // GRAB ITEM
             case KeyCode.G:
-                PickupItem();
+                if (gameManager.GetItemPickupAtTile(transform.position) != null)
+                    PickupItem();
                 break;
             
             // TOGGLE INVENTORY MENU
