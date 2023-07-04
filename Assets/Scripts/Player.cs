@@ -387,7 +387,8 @@ public class Player : MonoBehaviour
         {
             dead = true;
             gameManager.GameOver();
-            //this.gameObject.SetActive(false);
+            GetComponentInChildren<SpriteRenderer>().flipY = true;
+            GetComponentInChildren<Animator>().enabled = false;
         }
     }
 }
