@@ -72,6 +72,22 @@ public class Player : MonoBehaviour
     {
         if (!_debouncing)
         {
+            // toggle inventory menu
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                StartCoroutine(DebounceCoroutine(KeyCode.I));
+                hitEscapeLast = false;
+            }
+
+            // hit escape twice to quit
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                StartCoroutine(DebounceCoroutine(KeyCode.Escape));
+            }
+
+            if (dead)
+                return;
+
             // north
             if (Input.GetKeyDown(KeyCode.Keypad8))
             {
@@ -153,13 +169,7 @@ public class Player : MonoBehaviour
                 hitEscapeLast = false;
             }
             
-            // toggle inventory menu
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                StartCoroutine(DebounceCoroutine(KeyCode.I));
-                hitEscapeLast = false;
-            }
-
+            
             // use selected item
             if (Input.GetKeyDown(KeyCode.KeypadEnter))
             {
@@ -167,11 +177,7 @@ public class Player : MonoBehaviour
                 hitEscapeLast = false;
             }
 
-            // hit escape twice to quit
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                StartCoroutine(DebounceCoroutine(KeyCode.Escape));
-            }
+            
             
             // TODO: toggle "Look" mode
             /*

@@ -277,8 +277,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        eventLog.LogEvent("You died!");
-        eventLog.CloseWriter();
+        LogEvent("You died!");
     }
 
 }
