@@ -277,6 +277,17 @@ public class Tree
         return point;
     }
 
+    public List<Area> GetCandlePoints()
+    {
+        List<Area> CandlePoints = new List<Area>();
+        // For each room
+        foreach (Area room in _roomList)
+        {
+            CandlePoints.Add(RandPointWithin(room));
+        }
+        return CandlePoints;
+    }
+
     // Split `node` into exact halves along a vertical line. No random generation of room dimensions.
     private void HalveVertically(TreeNode node, TreeNode newLChild, TreeNode newRChild)
     {
