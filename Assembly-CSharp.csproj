@@ -50,6 +50,7 @@
      <Compile Include="Assets/ResolutionButton.cs" />
      <Compile Include="Assets/Scripts/MenuBackgroundWalkingAnt.cs" />
      <Compile Include="Assets/Scripts/EventLog.cs" />
+     <Compile Include="Assets/Scripts/Candle.cs" />
      <Compile Include="Assets/Scripts/GameManager.cs" />
      <Compile Include="Assets/Scripts/ItemPickup.cs" />
      <Compile Include="Assets/Scripts/Mob.cs" />
