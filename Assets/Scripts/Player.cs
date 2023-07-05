@@ -195,6 +195,7 @@ public class Player : MonoBehaviour
         // If the player moves or attacks, advance the turn counter.
         // HUD manipulations can be done indefinitely in the same turn.
         bool advancedTurn = false;
+        _targetPosition = transform.position;
         switch (key)
         {
             // N
