@@ -20,7 +20,12 @@ public class LevelGenerator : MonoBehaviour
     public Tile floorTile;
     public Tile wallTile;
 
+    public Tile[] floorTileTiers;
+    public Tile[] wallTileTiers;
+
     public Tree BinaryTree = new Tree();
+
+    public GameObject Candle;
 
     public GameObject Mob;
     public List<GameObject> MobList;
@@ -70,8 +75,31 @@ public class LevelGenerator : MonoBehaviour
                 BL || B || BR );
     }
     
-    public void GenerateLevel()
+    public void GenerateLevel(int level)
     {
+        int tier = 0;
+
+        if (level == 1)
+        {
+            tier = 0;
+        }
+        else if (level > 1 && level < 6)
+        {
+            tier = 1;
+        }
+        else if (level > 5 && level < 10)
+        {
+            tier = 2;
+        }
+        else if (level > 9 && level < 14)
+        {
+            tier = 3;
+        }
+        else if (level == 14)
+        {
+            tier = 4;
+        }
+        
         // Set up a binary tree and use it to generate the level.
         BinaryTree = new Tree();
 
@@ -94,14 +122,23 @@ public class LevelGenerator : MonoBehaviour
                 {
                     case 0: // wall
                         if (TouchesFloor(x,y))
-                            wallMap.SetTile(position, wallTile);
+                            wallMap.SetTile(position, wallTileTiers[tier]);
                         break;
                     case 1: // floor
-                        floorMap.SetTile(position, floorTile);
+                        floorMap.SetTile(position, floorTileTiers[tier]);
                         break;
 
                 }
             }
+        }
+        
+        // Put a candle in each room
+        List<Area> candlePoints = BinaryTree.GetCandlePoints();
+        foreach (Area candlePoint in candlePoints)
+        {
+            GameObject.Instantiate(Candle, 
+                new Vector3(candlePoint.X + 0.5f, candlePoint.Y + 0.5f, 0), 
+                Quaternion.identity);
         }
     }
 }

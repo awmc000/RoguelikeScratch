@@ -83,9 +83,9 @@ public class GameManager : MonoBehaviour
     public void CreateLevel()
     {
         Level++;
-        levelGenerator.GenerateLevel();
+        levelGenerator.GenerateLevel(Level);
 
-        // TODO: Get rid of old mobs
+        // Get rid of old mobs
         for (int i = 0; i < levelGenerator.InstantiatedMobsList.Count(); i++)
             Destroy(levelGenerator.InstantiatedMobsList[i]);
         
@@ -94,8 +94,10 @@ public class GameManager : MonoBehaviour
         int[] tunnelPosArr = levelGenerator.BinaryTree.GetEntitySpot();
         Vector3 tunnelPos = new Vector3(tunnelPosArr[0] + 0.5f, tunnelPosArr[1] + 0.5f, 0);
         tunnel = Instantiate(tunnel, tunnelPos, Quaternion.identity);
+        
         Destroy(_oldTunnel);
         
+        // Place the player in a random location
         PlacePlayer();
 
         for (int i = 0; i < HowManyMobs(); i++)
