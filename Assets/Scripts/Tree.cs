@@ -77,7 +77,9 @@ public class Tree
         }   
     }
     
-    // Split `node` into exact halves along a vertical line. No random generation of room dimensions.
+    /**
+     * Splits `node` into exact halves along a vertical line. No random generation of room dimensions.
+     */
     private void HalveVertically(TreeNode node, TreeNode newLChild, TreeNode newRChild)
     {
         Area toDivide = node.Data;
@@ -93,6 +95,9 @@ public class Tree
         newRChild.Data = rightHalf;
     }
 
+    /**
+     * Splits `node` into exact halves along a horizontal line. No random generation of room dimensions.
+     */
     private void HalveHorizontally(TreeNode node, TreeNode newLChild, TreeNode newRChild)
     {
         Area toDivide = node.Data;
