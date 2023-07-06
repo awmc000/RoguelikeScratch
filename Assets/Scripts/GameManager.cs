@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
@@ -25,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     public GameDice Dice;
 
-    public int Level;
+    [FormerlySerializedAs("Level")] public int level;
 
     private Texture2D MakeTex( int width, int height, Color col )
     {
@@ -66,24 +67,39 @@ public class GameManager : MonoBehaviour
 
         LogEvent("The Burrow Tale begins.");
 
-        Level = 0;
+        level = 0;
         
         CreateLevel();
     }
 
+    /**
+     * Adds a turn counter to an event string before calling the EventLog's
+     * method to log the event.
+     */
     private void LogEvent(string eventString)
     {
         eventLog.LogEvent("[" + _turnsPassed + "]: " + eventString);
     }
 
+    /**
+     * Calculates how many mobs a level of the dungeon should have. The
+     * formula is to round up `2 + (0.9 * level)` to the nearest integer.
+     * 
+     * \return `int`, a recommended number of enemies to place in a level.
+     */
     private int HowManyMobs()
     {
-        return (int) Math.Round(0.9 * Level + 2);
+        return (int) Math.Round(0.9 * level + 2);
     }
+    
+    /**
+     * Sets up a new level of the dungeon, destroying old mobs and creating new
+     * ones, and placing the player somewhere random.
+     */
     public void CreateLevel()
     {
-        Level++;
-        levelGenerator.GenerateLevel(Level);
+        level++;
+        levelGenerator.GenerateLevel(level);
 
         // Get rid of old mobs
         for (int i = 0; i < levelGenerator.InstantiatedMobsList.Count(); i++)
@@ -103,12 +119,21 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < HowManyMobs(); i++)
             levelGenerator.InstantiatedMobsList.Add(CreateMob());
     }
+    
+    /**
+     * Puts the player in a random location on the map obtained by `Tree.GetEntitySpot()`.
+     */
     private void PlacePlayer()
     {
         int[] playerPos = levelGenerator.BinaryTree.GetEntitySpot();
         Vector3 playerPosVec = new Vector3(playerPos[0] + 0.5f, playerPos[1] + 0.5f, 0);
         player.transform.position = playerPosVec;
     }
+    
+    /**
+     * Creates a new mob at a random location in the level. The mob is randomly selected
+     * from a list that belongs to the `LevelGenerator` instance that this object owns.
+     */
     private GameObject CreateMob()
     {
         int[] mobSpotArr = levelGenerator.BinaryTree.GetEntitySpot();
@@ -119,6 +144,11 @@ public class GameManager : MonoBehaviour
         return Instantiate(mob, mobSpotVec, Quaternion.identity);
     }
 
+    /**
+     * Returns whether the given position on the tilemap is free.
+     * \param targetPos An (x, y) position to check.
+     * \return True if there is no mob or wall at the tile `targetPos`. 
+     */
     public bool TileFree(Vector2 targetPos)
     {
 
@@ -131,10 +161,21 @@ public class GameManager : MonoBehaviour
         return ((!wallTile) && (!mobThere));
     }
 
+    /**
+     * Returns whether there is a tunnel to the next level at the given tile.
+     * \param targetPos An (x, y) position to check.
+     * \return True if there is a tile at the tile `targetPos`.
+     */
     public bool TunnelAtTile(Vector2 targetPos)
     {
         return (Vector2)tunnel.transform.position == targetPos;
     }
+    
+    /**
+     * Returns whether there is a mob at the given tile.
+     * \param targetPos An (x, y) position to check.
+     * \return True if there is a tile at the tile `targetPos`.
+     */
     public bool MobAtTile(Vector2 targetPos)
     {
         UpdateMobsList();
@@ -149,6 +190,12 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
+    /**
+     * Used together with `MobAtTile()`. Given a `targetPos`, returns the mob
+     * that is on that tile.
+     * \param targetPos An (x, y) position to check.
+     * \return Mob object.
+     */
     public Mob GetMobAtTile(Vector2 targetPos)
     {
         foreach (Mob mob in mobsOnScreen)
@@ -161,6 +208,9 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    /**
+     * Returns the ItemPickup at `targetPos` if one is there.
+     */
     public ItemPickup GetItemPickupAtTile(Vector2 targetPos)
     {
         UpdateItemPickupsList();
@@ -176,6 +226,9 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    /**
+     * Returns true if the player and `mob` are in contact and therefore can fight.
+     */
     public bool CanFight(Mob mob)
     {
         Vector3 mobPos = mob.transform.position;
@@ -214,16 +267,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /**
+     * Returns the player's position as a `Vector2`.
+     */
     public Vector2 GetPlayerPos()
     {
         return player.transform.position;
     }
 
+    /**
+     * This method is used to make sure all `Mob` objects are in the
+     * `mobsOnScreen` list.
+     */
     public void UpdateMobsList()
     {
         mobsOnScreen = FindObjectsOfType<Mob>();
     }
     
+    /**
+     * This method is used to make sure all `ItemPickup` objects are in the
+     * `itemPickupsOnScreen` list.
+     */
     public void UpdateItemPickupsList()
     {
         itemPickupsOnScreen = FindObjectsOfType<ItemPickup>();
@@ -231,6 +295,11 @@ public class GameManager : MonoBehaviour
     }
 
     // Thanks Imprity from Unity Forum
+    /**
+     * Draws a sprite onto a `Rect` object for GUI uses.
+     * 
+     * Method written by Imprity on the Unity forums.
+     */
     public static void GUIDrawSprite(Rect rect, Sprite sprite){
         UnityEngine.Rect spriteRect = sprite.rect;
         UnityEngine.Texture2D tex = sprite.texture;
@@ -239,6 +308,9 @@ public class GameManager : MonoBehaviour
                 spriteRect.width/ tex.width, spriteRect.height / tex.height));
     }
 
+    /**
+     * Draws the basic game HUD, namely the turn counter, player HP, and inventory if open.
+     */
     void OnGUI()
     {
         GUI.Box(_labelRect, "Turn " + _turnsPassed + "; HP: " + player.GetHealth()
@@ -262,9 +334,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*
-     * The Player calls this method when it is done its turn.
-     * So this function handles the NPCs and any other phenomena and then advances the turn counter.
+    /**
+     * Player calls this method when it is done its turn.
+     * Handles the NPCs and any other phenomena and then advances the turn counter.
      */
     public void FinishTurn()
     {

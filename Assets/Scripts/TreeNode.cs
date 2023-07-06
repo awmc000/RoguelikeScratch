@@ -8,12 +8,9 @@ public class TreeNode
     private TreeNode[] _children = new TreeNode[2]; // [leftChild, rightChild]
     
     public Area Data;
-    // Set to true if the node's children are turned into rooms
-    // and are connected by a corridor.
-    // bool childrenConnected = false;
 
     // ====================================================
-    // Constructors
+    // Constructor
     // ====================================================
     public TreeNode(TreeNode parentNode)
     {

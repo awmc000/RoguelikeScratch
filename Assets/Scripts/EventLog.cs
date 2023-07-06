@@ -1,11 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+/**
+ * The EventLog takes events as strings from other parts of the game
+ * and prints them to the screen and to a text file.
+ *
+ * The EventLog handles the GUI side of printing to screen and also
+ * the file IO side of printing to a file.
+ * 
+ * A new timestamped text file is open for each playthrough. 
+ */
 public class EventLog : MonoBehaviour
 {
-    // data members
+    // ====================================================
+    // Data Members
+    // ====================================================
     List<string> _eventList;
 
     Rect _labelRect;
@@ -13,19 +23,10 @@ public class EventLog : MonoBehaviour
     public Font labelFont;
     private StreamWriter _writer;
 
-    private Texture2D MakeTex( int width, int height, Color col )
-    {
-        Color[] pix = new Color[width * height];
-        for( int i = 0; i < pix.Length; ++i )
-        {
-            pix[ i ] = col;
-        }
-        Texture2D result = new Texture2D( width, height );
-        result.SetPixels( pix );
-        result.Apply();
-        return result;
-    }
-
+    // ====================================================
+    // Event Methods
+    // ====================================================
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -46,23 +47,7 @@ public class EventLog : MonoBehaviour
         
         LogEvent("Set up the EventLog.");
     }
-
-    public void LogEvent(string eventString)
-    {
-        // write to ingame event log
-        _eventList.Add(eventString);
-        
-        // write to text file
-        _writer.WriteLine(eventString);
-        
-        Debug.Log("Logged event: " + eventString);
-    }
-
-    public void CloseWriter()
-    {
-        _writer.Close();
-    }
-
+    
     // Update is called once per frame
     void OnGUI()
     {
@@ -85,6 +70,45 @@ public class EventLog : MonoBehaviour
 
         GUI.Box(_labelRect, fullReport, _labelStyle);
     }
+    private Texture2D MakeTex( int width, int height, Color col )
+    {
+        Color[] pix = new Color[width * height];
+        for( int i = 0; i < pix.Length; ++i )
+        {
+            pix[ i ] = col;
+        }
+        Texture2D result = new Texture2D( width, height );
+        result.SetPixels( pix );
+        result.Apply();
+        return result;
+    }
+
+    // ====================================================
+    // Other Methods
+    // ====================================================
+
+    /**
+     * The main feature of EventLog is this method. Logs an event
+     * to an ingame console, to a text file, and to the Unity
+     * Engine logs.
+     */
+    public void LogEvent(string eventString)
+    {
+        // write to ingame event log
+        _eventList.Add(eventString);
+        
+        // write to text file
+        _writer.WriteLine(eventString);
+        
+        Debug.Log("Logged event: " + eventString);
+    }
+
+    public void CloseWriter()
+    {
+        _writer.Close();
+    }
+
+
 
     void OnDestroy()
     {

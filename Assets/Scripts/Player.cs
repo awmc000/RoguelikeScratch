@@ -6,27 +6,36 @@ using UnityEngine.Tilemaps;
 
 public class Player : MonoBehaviour
 {
-    // data members
+    // ====================================================
+    // Data Members
+    // ====================================================
+    
+    // Reference to gameManager to send messages back
+    public GameManager gameManager;
+    
+    // Movement
     bool _debouncing;
     Vector3 _movementVector;
     Vector2 _targetPosition;
-    public TilemapCollider2D tilemapCollider2D;
-    public GameManager gameManager;
-
-    public int maxHealth;
-    int _currentHealth;
-    public int attackDamage;
     
+
+    // HP & death
+    public int maxHealth;
+    private int _currentHealth;
+    private bool _dead = false;
+
+    // Attack info
+    public int attackDamage; //! Number of D6 dice to roll for player's attack damage.
     public AudioSource attackSound;
 
-    public bool dead = false;
-
-    public List<Item> Inventory;
-    public int money = 0;
-    public int selectedItem = 0;
-    // Interface
     public bool inventoryOpen;
-    public bool hitEscapeLast;
+    public List<Item> Inventory;
+    public int selectedItem = 0;
+    public int money = 0;
+    
+    /*!< Tracks whether the last key pressed was escape. If it was, another press
+     * will take the player to the main menu and abandon the game. */
+    public bool hitEscapeLast; 
     public enum InputMode
     {
         Movement,
@@ -36,16 +45,33 @@ public class Player : MonoBehaviour
     public InputMode mode = InputMode.Movement;
     
     // Setters and getters
+    
+    /**
+     * Accessor method that returns the player's health points as an `int`.
+     * \return `int`, player's current health points
+     */
     public int GetHealth()
     {
         return _currentHealth;
     }
 
+    /**
+     * Mutator method that adds the `int` parameter `change` to the player's health.
+     *
+     * Game logic for a health potion will pass a positive value and game logic for
+     * damage would pass a negative value.
+     * \param change Value to add to player health points.
+     */
     public void ChangeHealth(int change)
     {
-        _currentHealth += change;
+        _currentHealth += change; 
+        _currentHealth %= maxHealth + 1;
     }
 
+    /**
+     * Mutator method that sets the player's health to the int parameter `newHealth`.
+     * \param newHealth the value to set player health points to.
+     */
     public void SetHealth(int newHealth)
     {
         _currentHealth = newHealth;
@@ -58,7 +84,11 @@ public class Player : MonoBehaviour
         attackSound.Play();
     }
 
-    // Start is called before the first frame update
+    /**
+     * As with any MonoBehaviour, start is called before the first frame update.
+     * Sets up the movement and target position vectors, sets the current HP to
+     * the maximum, constructs the inventory, and sets `inventoryOpen` to `false`.
+     */
     void Start()
     {
         _movementVector = new Vector3(0.0f, 0.0f, 0.0f);
@@ -68,6 +98,10 @@ public class Player : MonoBehaviour
         inventoryOpen = false;
     }
 
+    /**
+     * Uses debouncing to accept keypresses and start coroutines (`DebounceCoroutine()`)
+     * to handle them.
+     */
     private void HandleInput()
     {
         if (!_debouncing)
@@ -85,7 +119,7 @@ public class Player : MonoBehaviour
                 StartCoroutine(DebounceCoroutine(KeyCode.Escape));
             }
 
-            if (dead)
+            if (_dead)
                 return;
 
             // north
@@ -176,8 +210,6 @@ public class Player : MonoBehaviour
                 StartCoroutine(DebounceCoroutine(KeyCode.KeypadEnter));
                 hitEscapeLast = false;
             }
-
-            
             
             // TODO: toggle "Look" mode
             /*
@@ -190,6 +222,14 @@ public class Player : MonoBehaviour
 
     }
 
+    /**
+     * Given `key`, which identifies which key has been pressed,
+     * executes the appropriate game logic. As the name suggests, this is a
+     * coroutine.
+     *
+     * \param key The key which has been pressed, such as `KeyCode.Keypad8`
+     * \return 
+     */
     IEnumerator DebounceCoroutine(KeyCode key)
     {
         // If the player moves or attacks, advance the turn counter.
@@ -352,11 +392,18 @@ public class Player : MonoBehaviour
         _debouncing = false;
     }
 
+    /**
+     * Given an item which the player has just used, applies the appropriate changes
+     * to player's location, stats, etc.
+     *
+     * \param item The item which the player has just used. Each `ItemPickup` object
+     * owns an `Item` object that is used here.
+     */
     private void UseItem(Item item)
     {
         if (item.Stats.ContainsKey("hp"))
         {
-            _currentHealth = _currentHealth + item.Stats["hp"] % (maxHealth + 1);
+            _currentHealth = (_currentHealth + item.Stats["hp"]) % (maxHealth + 1);
             gameManager.eventLog.LogEvent("Restored " + item.Stats["hp"] + " hp.");
         }
 
@@ -372,6 +419,11 @@ public class Player : MonoBehaviour
             transform.position = new Vector3((float)gopt[0] + 0.5f, (float)gopt[1] + 0.5f, 0f);
         }
     }
+    
+    /**
+     * Assuming that there is an item where the player is standing on the tilemap,
+     * adds it to the player's inventory.
+     */
     private void PickupItem()
     {
         ItemPickup itemPickup = gameManager.GetItemPickupAtTile(transform.position);
@@ -381,18 +433,26 @@ public class Player : MonoBehaviour
         Inventory.Add(item);
     }
 
+    /**
+     * If the player is dead, ends the game, also flips the sprite and ceases animating
+     * it to visually communicate that the player is dead.
+     */
+    private void CheckDead()
+    {
+        if (_currentHealth <= 0 && !_dead)
+        {
+            _dead = true;
+            gameManager.GameOver();
+            GetComponentInChildren<SpriteRenderer>().flipY = true;
+            GetComponentInChildren<Animator>().enabled = false;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
         HandleInput();
 
         // check if I'm dead!
-        if (_currentHealth <= 0 && !dead)
-        {
-            dead = true;
-            gameManager.GameOver();
-            GetComponentInChildren<SpriteRenderer>().flipY = true;
-            GetComponentInChildren<Animator>().enabled = false;
-        }
+        CheckDead();
     }
 }

@@ -3,12 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class NewGameButton : MonoBehaviour
 {
-    // Start is called before the first frame update
+    /**
+     * Loads the game itself, closing the main menu.
+     */
     public void OnPress()
     {
         SceneManager.LoadScene("SampleScene");
     }
 
+    /**
+     * Closes the game.
+     */
     public void OnQuit()
     {
         Application.Quit();
@@ -16,6 +21,9 @@ public class NewGameButton : MonoBehaviour
 
     public bool settingsOpen = true;
 
+    /**
+     * Toggles whether the full screen and set resolution buttons are visible.
+     */
     public void OnToggleSettings()
     {
         settingsOpen = !settingsOpen;

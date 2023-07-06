@@ -12,15 +12,22 @@ using Random = System.Random;
  */
 public class Tree
 {
+    // ====================================================
+    // Data Members
+    // ====================================================
     // Constants
     public const int DungeonWidth   = 80; // In tiles
     public const int DungeonHeight  = 40;
+    
     private const int SplitMargin    = 1; // How many tiles between rooms
-    private const int CorridorWidth = 1; 
     private const int SplitIterations = 3; // Dungeon will have 2^SplitIterations. So if this is 3, 8 rooms.
 
+    private const int CorridorWidth = 1; 
+    
     public const int TileFlagFloor = 1;
     public const int TileFlagWall = 0;
+    
+    // Variables
     
     private TreeNode _root;
     private List<TreeNode> _leafNodes;
@@ -29,6 +36,9 @@ public class Tree
 
     private Random _random;
     
+    // ====================================================
+    // Constructor
+    // ====================================================
     public Tree()
     {
         _root = new TreeNode(null);
@@ -39,8 +49,72 @@ public class Tree
         _random = new Random();
     }
     
-    // Split each leaf. Make the leafs children the new leafs.
-    public void SplitAll()
+    // ====================================================
+    // Binary Partition Algorithm Internal Methods
+    // ====================================================
+    
+    /**
+     * Splits a single node into two. Partitions its Area in a random
+     * direction, calling `HalveVertically()` or `HalveHorizontally()`.
+     */
+    private void Split(TreeNode node)
+    {
+        TreeNode newLChild = new TreeNode(node);
+        TreeNode newRChild = new TreeNode(node);
+        
+        node.SetLeftChild(newLChild);
+        node.SetRightChild(newRChild);
+
+        // choose a random direction : horizontal or vertical splitting
+        bool splitVertically = _random.Next(10 + 1) < 5;
+        if (splitVertically)
+        {
+            HalveVertically(node, newLChild, newRChild);
+        }
+        else
+        {
+            HalveHorizontally(node, newLChild, newRChild);
+        }   
+    }
+    
+    // Split `node` into exact halves along a vertical line. No random generation of room dimensions.
+    private void HalveVertically(TreeNode node, TreeNode newLChild, TreeNode newRChild)
+    {
+        Area toDivide = node.Data;
+        
+        // Compute the left half of the area.
+        Area leftHalf = new Area(toDivide.X, toDivide.Y, toDivide.W / 2, toDivide.H);
+        
+        // Compute the right half of the area.
+        Area rightHalf = new Area(toDivide.X + (toDivide.W / 2), toDivide.Y, toDivide.W / 2, toDivide.H);
+        
+        // Assign the appropriate halved area to each new child node.
+        newLChild.Data = leftHalf;
+        newRChild.Data = rightHalf;
+    }
+
+    private void HalveHorizontally(TreeNode node, TreeNode newLChild, TreeNode newRChild)
+    {
+        Area toDivide = node.Data;
+        
+        // Compute the left half of the area.
+        Area topHalf = new Area(toDivide.X, toDivide.Y, toDivide.W, toDivide.H / 2);
+        
+        // Compute the right half of the area.
+        Area bottomHalf = new Area(toDivide.X, toDivide.Y + (toDivide.H / 2), toDivide.W, toDivide.H / 2);
+        
+        // Assign the appropriate halved area to each new child node.
+        newLChild.Data = topHalf;
+        newRChild.Data = bottomHalf;
+    }
+    
+    /**
+     * Splits each leaf node of the tree. The new number of lead nodes
+     * will be equal to 2^depth. If there is only a root node, there
+     * will be two leaf nodes, if there are 4 leaf nodes, there will
+     * be eight.
+     */
+    private void SplitAll()
     {
         List<TreeNode> newLeafNodes = new List<TreeNode>();
 
@@ -62,77 +136,12 @@ public class Tree
         _leafNodes = newLeafNodes;
     }
 
-    public void Split(TreeNode node)
-    {
-        TreeNode newLChild = new TreeNode(node);
-        TreeNode newRChild = new TreeNode(node);
-        
-        node.SetLeftChild(newLChild);
-        node.SetRightChild(newRChild);
-
-        // choose a random direction : horizontal or vertical splitting
-        bool splitVertically = _random.Next(10 + 1) < 5;
-        if (splitVertically)
-        {
-            HalveVertically(node, newLChild, newRChild);
-        }
-        else
-        {
-            HalveHorizontally(node, newLChild, newRChild);
-        }   
-    }
-
-    // Prints a dungeon layout in ASCII to the terminal.
-    // Used in testing with dungeontest.sh
-    public void PrintMapArr(int[,] mapArr)
-    {
-        for (int y = 0; y < DungeonHeight; y++)
-        {
-            for (int x = 0; x < DungeonWidth; x++)
-            {
-                int v = mapArr[x, y];
-                switch (v)
-                {
-                    case TileFlagWall:
-                        Console.Write('█');
-                        break;
-                    case TileFlagFloor:
-                        Console.Write('.');
-                        break;
-                }
-            }
-            Console.WriteLine();
-        }
-    }
-
-    public int[,] MakeMapArr(List<Area> areaList)
-    {
-        int[,] mapArr = new int[DungeonWidth, DungeonHeight];
-
-        Console.WriteLine("Size of arr: " + mapArr.Length);
-
-        Area currentArea;
-        
-        for (int i = 0; i < areaList.Count; i++)
-        {
-            currentArea = areaList[i];
-
-            for (int y = 0; y < currentArea.H; y++)
-            {
-                for (int x = 0; x < currentArea.W; x++)
-                {
-                    mapArr[currentArea.X + x, currentArea.Y + y] = TileFlagFloor;
-                }
-            }
-        }
-
-        return mapArr;
-    }
-
-    // Takes a fully partitioned list of nodes with areas and put a room in each one.
-    // Returns a list of Areas describing rooms. Essentially randomly carves out a room within
-    // the bounds of each Area given by the Data members of nodes in the node list.
-    public void CreateRooms()
+    /**
+     * Takes a fully partitioned list of nodes with areas and put a room in each one.
+     * Returns a list of Areas describing rooms. Essentially randomly carves out a room within
+     * the bounds of each Area given by the Data members of nodes in the node list.
+     */
+    private void CreateRooms()
     {
         TreeNode currentNode;
         Area currentArea;
@@ -164,8 +173,10 @@ public class Tree
         }
     }
     
-    // Takes a list of rooms and adds to the list a series of corridors between rooms.
-    public void CreateCorridors()
+    /**
+     * Takes a list of rooms and adds to the list a series of corridors between rooms.
+     */
+    private void CreateCorridors()
     {
         // Shuffle the list
         int n = _roomList.Count;
@@ -239,6 +250,12 @@ public class Tree
             _roomList.Add(corridor);
     }
 
+    /**
+     * Returns a random point within `room`.
+     *
+     * \param room The room to pick a point within.
+     * \return `Area`, a random point within the room.
+     */
     private Area RandPointWithin(Area room)
     {
         // Pick a random point, where:
@@ -283,42 +300,23 @@ public class Tree
         // For each room
         foreach (Area room in _roomList)
         {
-            CandlePoints.Add(RandPointWithin(room));
+            if (room.W > 1 && room.H > 1)
+                CandlePoints.Add(RandPointWithin(room));
         }
         return CandlePoints;
     }
 
-    // Split `node` into exact halves along a vertical line. No random generation of room dimensions.
-    private void HalveVertically(TreeNode node, TreeNode newLChild, TreeNode newRChild)
-    {
-        Area toDivide = node.Data;
-        
-        // Compute the left half of the area.
-        Area leftHalf = new Area(toDivide.X, toDivide.Y, toDivide.W / 2, toDivide.H);
-        
-        // Compute the right half of the area.
-        Area rightHalf = new Area(toDivide.X + (toDivide.W / 2), toDivide.Y, toDivide.W / 2, toDivide.H);
-        
-        // Assign the appropriate halved area to each new child node.
-        newLChild.Data = leftHalf;
-        newRChild.Data = rightHalf;
-    }
+    
 
-    private void HalveHorizontally(TreeNode node, TreeNode newLChild, TreeNode newRChild)
-    {
-        Area toDivide = node.Data;
-        
-        // Compute the left half of the area.
-        Area topHalf = new Area(toDivide.X, toDivide.Y, toDivide.W, toDivide.H / 2);
-        
-        // Compute the right half of the area.
-        Area bottomHalf = new Area(toDivide.X, toDivide.Y + (toDivide.H / 2), toDivide.W, toDivide.H / 2);
-        
-        // Assign the appropriate halved area to each new child node.
-        newLChild.Data = topHalf;
-        newRChild.Data = bottomHalf;
-    }
-
+    /**
+     * The main feature of `Tree`. Generates an int array representing
+     * a dungeon generated by the binary partition algorithm, with all
+     * rooms connected by dog-leg hallways.
+     *
+     * \return A 2-dimensional jagged int array where value of
+     * TileFlagFloor == 1 represents a floor tile and  TileFlagWall
+     * == 0 represents a wall tile.
+     */
     public int[,] GenerateMap()
     {
         // Splitting 3 times gets the best results
@@ -334,8 +332,6 @@ public class Tree
         // Convert the rooms and corridors from a list of rooms' XYWH into a map with 0 for wall and 1 for floor
         _mapArray = MakeMapArr(_roomList);
         
-        // TODO: Compute some good spots for mobs and items to be spawned, and flag them as 2 and 3?
-
         return _mapArray;
     }
 
@@ -352,16 +348,29 @@ public class Tree
         arr[1] = y;
         return arr;
     }
-    /*
-    #if !UNITY_EDITOR
-    /*
-     * The main method is not used in the game itself, but is used for testing
-     * the dungeon generation algorithm in a separate executable, compiled with
-     * dungeontest.sh.
-    public static void Main(string[] args)
+    
+    private int[,] MakeMapArr(List<Area> areaList)
     {
-        Tree tree = new Tree();
-        tree.PrintMapArr(tree.GenerateMap());
+        int[,] mapArr = new int[DungeonWidth, DungeonHeight];
+
+        Console.WriteLine("Size of arr: " + mapArr.Length);
+
+        Area currentArea;
+        
+        for (int i = 0; i < areaList.Count; i++)
+        {
+            currentArea = areaList[i];
+
+            for (int y = 0; y < currentArea.H; y++)
+            {
+                for (int x = 0; x < currentArea.W; x++)
+                {
+                    mapArr[currentArea.X + x, currentArea.Y + y] = TileFlagFloor;
+                }
+            }
+        }
+
+        return mapArr;
     }
-    */
+
 }

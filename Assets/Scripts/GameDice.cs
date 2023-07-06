@@ -1,6 +1,6 @@
 using Random = System.Random;
 
-/*
+/**
  * GameDice
  *
  * Used by the GameManager to roll dice.
@@ -15,6 +15,15 @@ public class GameDice
     {
         _random = new Random();
     }
+    
+    /**
+     * Simulates rolling the die/dice: generates a random number
+     * between 1 and `faces * quantity`.
+     *
+     * \param faces how many faces the dice have
+     * \param quantity how many dice to roll
+     * \return `int`, random number that is in the range [1, quantity * faces]
+     */
     public int Roll(int faces, int quantity)
     {
         int roll = 0;
