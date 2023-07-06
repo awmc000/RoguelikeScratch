@@ -1,0 +1,122 @@
+\hypertarget{classPlayer}{}\doxysection{Player Class Reference}
+\label{classPlayer}\index{Player@{Player}}
+
+
+Inheritance diagram for Player\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=164pt]{classPlayer__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Player\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classPlayer__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classPlayer_abf69bfa621e0758c0a8e43a2fd99465a}\label{classPlayer_abf69bfa621e0758c0a8e43a2fd99465a}} 
+enum class {\bfseries Input\+Mode} \{ {\bfseries Movement}
+, {\bfseries Inventory}
+, {\bfseries Looking}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classPlayer_a357061d69397626842e5f4908f98dde3}{Get\+Health}} ()
+\item 
+void \mbox{\hyperlink{classPlayer_a3fc3d9135e708faea1f9311c9db1a227}{Change\+Health}} (int change)
+\item 
+void \mbox{\hyperlink{classPlayer_a0ac82dec8fcd4a37d1ecab6ab3be407f}{Set\+Health}} (int new\+Health)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classPlayer_a066d7cff53913d18e6d335d0f7e7cdb9}\label{classPlayer_a066d7cff53913d18e6d335d0f7e7cdb9}} 
+\mbox{\hyperlink{classGameManager}{Game\+Manager}} {\bfseries game\+Manager}
+\item 
+\mbox{\Hypertarget{classPlayer_ac51bc0232fa16f956acee68e1635f7dc}\label{classPlayer_ac51bc0232fa16f956acee68e1635f7dc}} 
+int {\bfseries max\+Health}
+\item 
+\mbox{\Hypertarget{classPlayer_a9d480251a841541a968022248bc85adb}\label{classPlayer_a9d480251a841541a968022248bc85adb}} 
+int {\bfseries attack\+Damage}
+\item 
+\mbox{\Hypertarget{classPlayer_ab247734616042cc098ffe8b7e410db25}\label{classPlayer_ab247734616042cc098ffe8b7e410db25}} 
+Audio\+Source \mbox{\hyperlink{classPlayer_ab247734616042cc098ffe8b7e410db25}{attack\+Sound}}
+\begin{DoxyCompactList}\small\item\em Number of D6 dice to roll for player\textquotesingle{}s attack damage. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classPlayer_a20581546774c00e3baa620a8a0d24d0a}\label{classPlayer_a20581546774c00e3baa620a8a0d24d0a}} 
+bool {\bfseries inventory\+Open}
+\item 
+\mbox{\Hypertarget{classPlayer_a5c5732d6b4545caf0f218bd1b0cdb901}\label{classPlayer_a5c5732d6b4545caf0f218bd1b0cdb901}} 
+List$<$ \mbox{\hyperlink{classItem}{Item}} $>$ {\bfseries Inventory}
+\item 
+\mbox{\Hypertarget{classPlayer_a171158f63535ae72a7fb39a529bac0ab}\label{classPlayer_a171158f63535ae72a7fb39a529bac0ab}} 
+int {\bfseries selected\+Item} = 0
+\item 
+int \mbox{\hyperlink{classPlayer_aed37167e4117c2518a154e73fbfc103c}{money}} = 0
+\item 
+\mbox{\Hypertarget{classPlayer_a2c9f513b06e2692fbe1115b10eb31354}\label{classPlayer_a2c9f513b06e2692fbe1115b10eb31354}} 
+bool {\bfseries hit\+Escape\+Last}
+\item 
+\mbox{\Hypertarget{classPlayer_aeb75c010e42b5d47a94d7422e3b4bb8b}\label{classPlayer_aeb75c010e42b5d47a94d7422e3b4bb8b}} 
+Input\+Mode {\bfseries mode} = Input\+Mode.\+Movement
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classPlayer_a3fc3d9135e708faea1f9311c9db1a227}\label{classPlayer_a3fc3d9135e708faea1f9311c9db1a227}} 
+\index{Player@{Player}!ChangeHealth@{ChangeHealth}}
+\index{ChangeHealth@{ChangeHealth}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{ChangeHealth()}{ChangeHealth()}}
+{\footnotesize\ttfamily void Player.\+Change\+Health (\begin{DoxyParamCaption}\item[{int}]{change }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Mutator method that adds the {\ttfamily int} parameter {\ttfamily change} to the player\textquotesingle{}s health.
+
+Game logic for a health potion will pass a positive value and game logic for damage would pass a negative value. 
+\begin{DoxyParams}{Parameters}
+{\em change} & Value to add to player health points. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classPlayer_a357061d69397626842e5f4908f98dde3}\label{classPlayer_a357061d69397626842e5f4908f98dde3}} 
+\index{Player@{Player}!GetHealth@{GetHealth}}
+\index{GetHealth@{GetHealth}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{GetHealth()}{GetHealth()}}
+{\footnotesize\ttfamily int Player.\+Get\+Health (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Accessor method that returns the player\textquotesingle{}s health points as an {\ttfamily int}. \begin{DoxyReturn}{Returns}
+{\ttfamily int}, player\textquotesingle{}s current health points 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classPlayer_a0ac82dec8fcd4a37d1ecab6ab3be407f}\label{classPlayer_a0ac82dec8fcd4a37d1ecab6ab3be407f}} 
+\index{Player@{Player}!SetHealth@{SetHealth}}
+\index{SetHealth@{SetHealth}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{SetHealth()}{SetHealth()}}
+{\footnotesize\ttfamily void Player.\+Set\+Health (\begin{DoxyParamCaption}\item[{int}]{new\+Health }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Mutator method that sets the player\textquotesingle{}s health to the int parameter {\ttfamily new\+Health}. 
+\begin{DoxyParams}{Parameters}
+{\em new\+Health} & the value to set player health points to. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classPlayer_aed37167e4117c2518a154e73fbfc103c}\label{classPlayer_aed37167e4117c2518a154e73fbfc103c}} 
+\index{Player@{Player}!money@{money}}
+\index{money@{money}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{money}{money}}
+{\footnotesize\ttfamily int Player.\+money = 0}
+
+Tracks whether the last key pressed was escape. If it was, another press will take the player to the main menu and abandon the game. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Player.\+cs\end{DoxyCompactItemize}

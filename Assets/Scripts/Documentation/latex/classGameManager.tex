@@ -1,0 +1,208 @@
+\hypertarget{classGameManager}{}\doxysection{Game\+Manager Class Reference}
+\label{classGameManager}\index{GameManager@{GameManager}}
+
+
+Inheritance diagram for Game\+Manager\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=164pt]{classGameManager__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Game\+Manager\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classGameManager__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classGameManager_a7d7379f822a088ff0aaee6551e066b99}{Create\+Level}} ()
+\item 
+bool \mbox{\hyperlink{classGameManager_ac653a6ec58b361098a55922aac086e50}{Tile\+Free}} (Vector2 target\+Pos)
+\item 
+bool \mbox{\hyperlink{classGameManager_a0a72cbcdd797750f52eeb2fcb5befef3}{Tunnel\+At\+Tile}} (Vector2 target\+Pos)
+\item 
+bool \mbox{\hyperlink{classGameManager_a87150e8c701c748c2a92db66d98dfae5}{Mob\+At\+Tile}} (Vector2 target\+Pos)
+\item 
+\mbox{\hyperlink{classMob}{Mob}} \mbox{\hyperlink{classGameManager_af1234515220a100180c862986ed2d059}{Get\+Mob\+At\+Tile}} (Vector2 target\+Pos)
+\item 
+\mbox{\hyperlink{classItemPickup}{Item\+Pickup}} \mbox{\hyperlink{classGameManager_a38683502ba7e0f43cc6f86b1777092fb}{Get\+Item\+Pickup\+At\+Tile}} (Vector2 target\+Pos)
+\item 
+bool \mbox{\hyperlink{classGameManager_a86d4406717e4495a1c6936bf3fb50084}{Can\+Fight}} (\mbox{\hyperlink{classMob}{Mob}} mob)
+\item 
+\mbox{\Hypertarget{classGameManager_a77f68dc2e0624f48df7b6b35d84f86a0}\label{classGameManager_a77f68dc2e0624f48df7b6b35d84f86a0}} 
+void {\bfseries Hurt\+Player} (int dice)
+\item 
+\mbox{\Hypertarget{classGameManager_ae406a4fdced81f60089a470b10e596a7}\label{classGameManager_ae406a4fdced81f60089a470b10e596a7}} 
+void {\bfseries Hurt\+Mob} (\mbox{\hyperlink{classMob}{Mob}} target, int dice)
+\item 
+Vector2 \mbox{\hyperlink{classGameManager_af51db5af5575bf1f6d26d84a883f73dd}{Get\+Player\+Pos}} ()
+\item 
+void \mbox{\hyperlink{classGameManager_a6fbd4d48571355eb0a4d401f0f2bd440}{Update\+Mobs\+List}} ()
+\item 
+void \mbox{\hyperlink{classGameManager_af5dfa440d87e4f6f2e1092f2b2a7efe8}{Update\+Item\+Pickups\+List}} ()
+\item 
+void \mbox{\hyperlink{classGameManager_a0975c389ebeec8fa31729fbe8f0e0961}{Finish\+Turn}} ()
+\item 
+\mbox{\Hypertarget{classGameManager_a8d69157cb6b97eabeff2374d8e9adeaf}\label{classGameManager_a8d69157cb6b97eabeff2374d8e9adeaf}} 
+void {\bfseries Game\+Over} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classGameManager_ae278d705622e1d9cac352000607d0abd}{GUIDraw\+Sprite}} (Rect rect, Sprite sprite)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classGameManager_a55ef74f25d92eecc489dc3917152f9f4}\label{classGameManager_a55ef74f25d92eecc489dc3917152f9f4}} 
+Font {\bfseries label\+Font}
+\item 
+\mbox{\Hypertarget{classGameManager_a39d24955f603073d5352505541852daf}\label{classGameManager_a39d24955f603073d5352505541852daf}} 
+\mbox{\hyperlink{classPlayer}{Player}} {\bfseries player}
+\item 
+\mbox{\Hypertarget{classGameManager_a8cbb20deb9a1558c77ffc054b4e47239}\label{classGameManager_a8cbb20deb9a1558c77ffc054b4e47239}} 
+Tilemap\+Collider2D {\bfseries tilemap\+Collider2D}
+\item 
+\mbox{\Hypertarget{classGameManager_a035fb72fc11e6ef5d103483f45f10ddf}\label{classGameManager_a035fb72fc11e6ef5d103483f45f10ddf}} 
+\mbox{\hyperlink{classEventLog}{Event\+Log}} {\bfseries event\+Log}
+\item 
+\mbox{\Hypertarget{classGameManager_a01f8730b5af3a89d0c8ad0ecc4f5c3c6}\label{classGameManager_a01f8730b5af3a89d0c8ad0ecc4f5c3c6}} 
+\mbox{\hyperlink{classMob}{Mob}}\mbox{[}$\,$\mbox{]} {\bfseries mobs\+On\+Screen}
+\item 
+\mbox{\Hypertarget{classGameManager_a8d081eade177713083982ac0500b623a}\label{classGameManager_a8d081eade177713083982ac0500b623a}} 
+\mbox{\hyperlink{classItemPickup}{Item\+Pickup}}\mbox{[}$\,$\mbox{]} {\bfseries item\+Pickups\+On\+Screen}
+\item 
+\mbox{\Hypertarget{classGameManager_a78e5101c234c548fe3106cf8f71cf416}\label{classGameManager_a78e5101c234c548fe3106cf8f71cf416}} 
+Game\+Object {\bfseries tunnel}
+\item 
+\mbox{\Hypertarget{classGameManager_a80dd88e2622249f02c752fc84cac3f92}\label{classGameManager_a80dd88e2622249f02c752fc84cac3f92}} 
+\mbox{\hyperlink{classLevelGenerator}{Level\+Generator}} {\bfseries level\+Generator}
+\item 
+\mbox{\Hypertarget{classGameManager_aa07a9af35bec2541f93188f5084a2c05}\label{classGameManager_aa07a9af35bec2541f93188f5084a2c05}} 
+\mbox{\hyperlink{classGameDice}{Game\+Dice}} {\bfseries Dice}
+\item 
+\mbox{\Hypertarget{classGameManager_a097c52937fbd398b11bd06bd8d126348}\label{classGameManager_a097c52937fbd398b11bd06bd8d126348}} 
+int {\bfseries level}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classGameManager_a86d4406717e4495a1c6936bf3fb50084}\label{classGameManager_a86d4406717e4495a1c6936bf3fb50084}} 
+\index{GameManager@{GameManager}!CanFight@{CanFight}}
+\index{CanFight@{CanFight}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{CanFight()}{CanFight()}}
+{\footnotesize\ttfamily bool Game\+Manager.\+Can\+Fight (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMob}{Mob}}}]{mob }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns true if the player and {\ttfamily mob} are in contact and therefore can fight. \mbox{\Hypertarget{classGameManager_a7d7379f822a088ff0aaee6551e066b99}\label{classGameManager_a7d7379f822a088ff0aaee6551e066b99}} 
+\index{GameManager@{GameManager}!CreateLevel@{CreateLevel}}
+\index{CreateLevel@{CreateLevel}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{CreateLevel()}{CreateLevel()}}
+{\footnotesize\ttfamily void Game\+Manager.\+Create\+Level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Sets up a new level of the dungeon, destroying old mobs and creating new ones, and placing the player somewhere random. \mbox{\Hypertarget{classGameManager_a0975c389ebeec8fa31729fbe8f0e0961}\label{classGameManager_a0975c389ebeec8fa31729fbe8f0e0961}} 
+\index{GameManager@{GameManager}!FinishTurn@{FinishTurn}}
+\index{FinishTurn@{FinishTurn}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{FinishTurn()}{FinishTurn()}}
+{\footnotesize\ttfamily void Game\+Manager.\+Finish\+Turn (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\hyperlink{classPlayer}{Player}} calls this method when it is done its turn. Handles the NPCs and any other phenomena and then advances the turn counter. \mbox{\Hypertarget{classGameManager_a38683502ba7e0f43cc6f86b1777092fb}\label{classGameManager_a38683502ba7e0f43cc6f86b1777092fb}} 
+\index{GameManager@{GameManager}!GetItemPickupAtTile@{GetItemPickupAtTile}}
+\index{GetItemPickupAtTile@{GetItemPickupAtTile}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{GetItemPickupAtTile()}{GetItemPickupAtTile()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classItemPickup}{Item\+Pickup}} Game\+Manager.\+Get\+Item\+Pickup\+At\+Tile (\begin{DoxyParamCaption}\item[{Vector2}]{target\+Pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the \mbox{\hyperlink{classItemPickup}{Item\+Pickup}} at {\ttfamily target\+Pos} if one is there. \mbox{\Hypertarget{classGameManager_af1234515220a100180c862986ed2d059}\label{classGameManager_af1234515220a100180c862986ed2d059}} 
+\index{GameManager@{GameManager}!GetMobAtTile@{GetMobAtTile}}
+\index{GetMobAtTile@{GetMobAtTile}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{GetMobAtTile()}{GetMobAtTile()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMob}{Mob}} Game\+Manager.\+Get\+Mob\+At\+Tile (\begin{DoxyParamCaption}\item[{Vector2}]{target\+Pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Used together with {\ttfamily \mbox{\hyperlink{classGameManager_a87150e8c701c748c2a92db66d98dfae5}{Mob\+At\+Tile()}}}. Given a {\ttfamily target\+Pos}, returns the mob that is on that tile. 
+\begin{DoxyParams}{Parameters}
+{\em target\+Pos} & An (x, y) position to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classMob}{Mob}} object. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGameManager_af51db5af5575bf1f6d26d84a883f73dd}\label{classGameManager_af51db5af5575bf1f6d26d84a883f73dd}} 
+\index{GameManager@{GameManager}!GetPlayerPos@{GetPlayerPos}}
+\index{GetPlayerPos@{GetPlayerPos}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{GetPlayerPos()}{GetPlayerPos()}}
+{\footnotesize\ttfamily Vector2 Game\+Manager.\+Get\+Player\+Pos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the player\textquotesingle{}s position as a {\ttfamily Vector2}. \mbox{\Hypertarget{classGameManager_ae278d705622e1d9cac352000607d0abd}\label{classGameManager_ae278d705622e1d9cac352000607d0abd}} 
+\index{GameManager@{GameManager}!GUIDrawSprite@{GUIDrawSprite}}
+\index{GUIDrawSprite@{GUIDrawSprite}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{GUIDrawSprite()}{GUIDrawSprite()}}
+{\footnotesize\ttfamily static void Game\+Manager.\+GUIDraw\+Sprite (\begin{DoxyParamCaption}\item[{Rect}]{rect,  }\item[{Sprite}]{sprite }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+Draws a sprite onto a {\ttfamily Rect} object for GUI uses.
+
+Method written by Imprity on the Unity forums. \mbox{\Hypertarget{classGameManager_a87150e8c701c748c2a92db66d98dfae5}\label{classGameManager_a87150e8c701c748c2a92db66d98dfae5}} 
+\index{GameManager@{GameManager}!MobAtTile@{MobAtTile}}
+\index{MobAtTile@{MobAtTile}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{MobAtTile()}{MobAtTile()}}
+{\footnotesize\ttfamily bool Game\+Manager.\+Mob\+At\+Tile (\begin{DoxyParamCaption}\item[{Vector2}]{target\+Pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether there is a mob at the given tile. 
+\begin{DoxyParams}{Parameters}
+{\em target\+Pos} & An (x, y) position to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if there is a tile at the tile {\ttfamily target\+Pos}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGameManager_ac653a6ec58b361098a55922aac086e50}\label{classGameManager_ac653a6ec58b361098a55922aac086e50}} 
+\index{GameManager@{GameManager}!TileFree@{TileFree}}
+\index{TileFree@{TileFree}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{TileFree()}{TileFree()}}
+{\footnotesize\ttfamily bool Game\+Manager.\+Tile\+Free (\begin{DoxyParamCaption}\item[{Vector2}]{target\+Pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether the given position on the tilemap is free. 
+\begin{DoxyParams}{Parameters}
+{\em target\+Pos} & An (x, y) position to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if there is no mob or wall at the tile {\ttfamily target\+Pos}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGameManager_a0a72cbcdd797750f52eeb2fcb5befef3}\label{classGameManager_a0a72cbcdd797750f52eeb2fcb5befef3}} 
+\index{GameManager@{GameManager}!TunnelAtTile@{TunnelAtTile}}
+\index{TunnelAtTile@{TunnelAtTile}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{TunnelAtTile()}{TunnelAtTile()}}
+{\footnotesize\ttfamily bool Game\+Manager.\+Tunnel\+At\+Tile (\begin{DoxyParamCaption}\item[{Vector2}]{target\+Pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns whether there is a tunnel to the next level at the given tile. 
+\begin{DoxyParams}{Parameters}
+{\em target\+Pos} & An (x, y) position to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if there is a tile at the tile {\ttfamily target\+Pos}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGameManager_af5dfa440d87e4f6f2e1092f2b2a7efe8}\label{classGameManager_af5dfa440d87e4f6f2e1092f2b2a7efe8}} 
+\index{GameManager@{GameManager}!UpdateItemPickupsList@{UpdateItemPickupsList}}
+\index{UpdateItemPickupsList@{UpdateItemPickupsList}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{UpdateItemPickupsList()}{UpdateItemPickupsList()}}
+{\footnotesize\ttfamily void Game\+Manager.\+Update\+Item\+Pickups\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+This method is used to make sure all {\ttfamily \mbox{\hyperlink{classItemPickup}{Item\+Pickup}}} objects are in the {\ttfamily item\+Pickups\+On\+Screen} list. \mbox{\Hypertarget{classGameManager_a6fbd4d48571355eb0a4d401f0f2bd440}\label{classGameManager_a6fbd4d48571355eb0a4d401f0f2bd440}} 
+\index{GameManager@{GameManager}!UpdateMobsList@{UpdateMobsList}}
+\index{UpdateMobsList@{UpdateMobsList}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{UpdateMobsList()}{UpdateMobsList()}}
+{\footnotesize\ttfamily void Game\+Manager.\+Update\+Mobs\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+This method is used to make sure all {\ttfamily \mbox{\hyperlink{classMob}{Mob}}} objects are in the {\ttfamily mobs\+On\+Screen} list. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Game\+Manager.\+cs\end{DoxyCompactItemize}

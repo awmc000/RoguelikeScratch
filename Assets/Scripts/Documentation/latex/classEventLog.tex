@@ -1,0 +1,57 @@
+\hypertarget{classEventLog}{}\doxysection{Event\+Log Class Reference}
+\label{classEventLog}\index{EventLog@{EventLog}}
+
+
+Inheritance diagram for Event\+Log\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=164pt]{classEventLog__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Event\+Log\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=164pt]{classEventLog__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classEventLog_ae16db847a2fd1038c94b183db766f1d2}{Log\+Event}} (string event\+String)
+\item 
+\mbox{\Hypertarget{classEventLog_a74ac857669ba687bb0b231670642f12d}\label{classEventLog_a74ac857669ba687bb0b231670642f12d}} 
+void {\bfseries Close\+Writer} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classEventLog_a06143fc0b3abb32c323529ebf24582d1}\label{classEventLog_a06143fc0b3abb32c323529ebf24582d1}} 
+Font {\bfseries label\+Font}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The \mbox{\hyperlink{classEventLog}{Event\+Log}} takes events as strings from other parts of the game and prints them to the screen and to a text file.
+
+The \mbox{\hyperlink{classEventLog}{Event\+Log}} handles the GUI side of printing to screen and also the file IO side of printing to a file.
+
+A new timestamped text file is open for each playthrough. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classEventLog_ae16db847a2fd1038c94b183db766f1d2}\label{classEventLog_ae16db847a2fd1038c94b183db766f1d2}} 
+\index{EventLog@{EventLog}!LogEvent@{LogEvent}}
+\index{LogEvent@{LogEvent}!EventLog@{EventLog}}
+\doxysubsubsection{\texorpdfstring{LogEvent()}{LogEvent()}}
+{\footnotesize\ttfamily void Event\+Log.\+Log\+Event (\begin{DoxyParamCaption}\item[{string}]{event\+String }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+The main feature of \mbox{\hyperlink{classEventLog}{Event\+Log}} is this method. Logs an event to an ingame console, to a text file, and to the Unity Engine logs. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Event\+Log.\+cs\end{DoxyCompactItemize}

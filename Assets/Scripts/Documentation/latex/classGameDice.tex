@@ -1,0 +1,38 @@
+\hypertarget{classGameDice}{}\doxysection{Game\+Dice Class Reference}
+\label{classGameDice}\index{GameDice@{GameDice}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classGameDice_a7eafe6a4af390c49f0f08f7f2379d691}{Roll}} (int faces, int quantity)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classGameDice}{Game\+Dice}}
+
+Used by the \mbox{\hyperlink{classGameManager}{Game\+Manager}} to roll dice. Eg. Roll(6, 1) rolls one d6 die for a result between 1 and 6 inclusive. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classGameDice_a7eafe6a4af390c49f0f08f7f2379d691}\label{classGameDice_a7eafe6a4af390c49f0f08f7f2379d691}} 
+\index{GameDice@{GameDice}!Roll@{Roll}}
+\index{Roll@{Roll}!GameDice@{GameDice}}
+\doxysubsubsection{\texorpdfstring{Roll()}{Roll()}}
+{\footnotesize\ttfamily int Game\+Dice.\+Roll (\begin{DoxyParamCaption}\item[{int}]{faces,  }\item[{int}]{quantity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Simulates rolling the die/dice\+: generates a random number between 1 and {\ttfamily faces $\ast$ quantity}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em faces} & how many faces the dice have \\
+\hline
+{\em quantity} & how many dice to roll \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily int}, random number that is in the range \mbox{[}1, quantity $\ast$ faces\mbox{]} 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Game\+Dice.\+cs\end{DoxyCompactItemize}
