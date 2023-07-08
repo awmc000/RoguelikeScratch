@@ -47,6 +47,7 @@
      <Compile Include="Assets/Scripts/LevelGenerator.cs" />
      <Compile Include="Assets/Scripts/Tree.cs" />
      <Compile Include="Assets/Scripts/GameDice.cs" />
+     <Compile Include="Assets/Scripts/ResolutionButton.cs" />
      <Compile Include="Assets/Scripts/MenuBackgroundWalkingAnt.cs" />
      <Compile Include="Assets/Scripts/EventLog.cs" />
      <Compile Include="Assets/Scripts/Candle.cs" />
@@ -55,7 +56,6 @@
      <Compile Include="Assets/Scripts/Mob.cs" />
      <Compile Include="Assets/Scripts/Player.cs" />
      <Compile Include="Assets/Scripts/NewGameButton.cs" />
-     <Compile Include="Assets\Scripts\ResolutionButton.cs" />
      <Folder Include="Assets" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Overlay.shader" />
@@ -66,6 +66,7 @@
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Bitmap.shader" />
      <Folder Include="Assets/Scenes" />
      <Folder Include="Assets/DawnLike/Objects/Dawnlike Wall Palette" />
+     <Folder Include="Assets/Scripts" />
      <Folder Include="Assets/TextMesh Pro/Resources/Fonts &amp; Materials" />
      <None Include="Assets/TextMesh Pro/Shaders/TMPro_Mobile.cginc" />
      <Folder Include="Assets/DawnLike/Examples" />
@@ -91,6 +92,7 @@
      <Folder Include="Assets/Sounds" />
      <Folder Include="Assets/DawnLike/Objects" />
      <Folder Include="Assets/TextMesh Pro/Resources/Style Sheets" />
+     <Folder Include="Assets/Scripts/Documentation/html" />
      <Folder Include="Assets/TextMesh Pro/Fonts" />
      <None Include="Assets/TextMesh Pro/Resources/LineBreaking Following Characters.txt" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile Masking.shader" />
@@ -101,7 +103,10 @@
      <Folder Include="Assets/TextMesh Pro/Documentation" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader" />
      <Folder Include="Assets/Prefabs/Items" />
+     <Folder Include="Assets/Scripts/Documentation/latex" />
+     <Folder Include="Assets/Scripts/Documentation/html/search" />
      <None Include="Assets/TextMesh Pro/Sprites/EmojiOne.json" />
+     <Folder Include="Assets/Scripts/Documentation" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_Sprite.shader" />
      <Reference Include="UnityEngine">
      <HintPath>/home/alex/Unity/Hub/Editor/2021.3.26f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

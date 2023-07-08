@@ -74,31 +74,50 @@ public class LevelGenerator : MonoBehaviour
                 L  ||      R  ||
                 BL || B || BR );
     }
-    
-    public void GenerateLevel(int level)
-    {
-        int tier = 0;
 
+    /**
+     * Levels in the game are divided into five tiers: surface,
+     * topsoil, deepsoil, caves, and the Bunker. The first and last
+     * tiers have 1 one level and those in between have 4 levels for
+     * a total of 14 levels in this short game.
+     * This method gets the tier which a level belongs to, so that
+     * the appropriate world gen tiles are used.
+     *
+     * \param level An int in the range [1, 14].
+     * \return `int` in the range [0, 4].
+     */
+    private int GetLevelTier(int level)
+    {
         if (level == 1)
         {
-            tier = 0;
+            return 0;
         }
-        else if (level > 1 && level < 6)
+        
+        if (level > 1 && level < 6)
         {
-            tier = 1;
+            return 1;
         }
-        else if (level > 5 && level < 10)
+        
+        if (level > 5 && level < 10)
         {
-            tier = 2;
+            return 2;
         }
-        else if (level > 9 && level < 14)
+        
+        if (level > 9 && level < 14)
         {
-            tier = 3;
+            return 3;
         }
-        else if (level == 14)
+        
+        if (level == 14)
         {
-            tier = 4;
+            return 4;
         }
+
+        return 0;
+    }
+    public void GenerateLevel(int level)
+    {
+        int tier = GetLevelTier(level);
         
         // Set up a binary tree and use it to generate the level.
         BinaryTree = new Tree();

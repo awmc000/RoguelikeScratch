@@ -81,7 +81,6 @@ public class Player : MonoBehaviour
     {
         Mob targetMob = gameManager.GetMobAtTile(_targetPosition);
         gameManager.HurtMob(targetMob, attackDamage);
-        attackSound.Play();
     }
 
     /**
@@ -224,11 +223,9 @@ public class Player : MonoBehaviour
 
     /**
      * Given `key`, which identifies which key has been pressed,
-     * executes the appropriate game logic. As the name suggests, this is a
-     * coroutine.
+     * executes the appropriate game logic. This is a coroutine.
      *
      * \param key The key which has been pressed, such as `KeyCode.Keypad8`
-     * \return 
      */
     IEnumerator DebounceCoroutine(KeyCode key)
     {

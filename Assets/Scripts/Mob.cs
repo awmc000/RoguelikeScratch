@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Mob : MonoBehaviour
 {
+    // ====================================================
+    // Data Members
+    // ====================================================
     public string mobName;
     public int maxHealth;
     public int currentHealth;
@@ -28,29 +31,40 @@ public class Mob : MonoBehaviour
 
     public AudioSource attackSound;
 
+    // ====================================================
+    // Accessor & Mutator Methods
+    // ====================================================
+    
+    /**
+     * Returns the health of this mob.
+     * \return `int`, health points.
+     */
     public int GetHealth()
     {
         return currentHealth;
     }
 
+    /**
+     * Adds a given integer to the mob's health points.
+     * Add a negative value to subtract health.
+     *
+     * \param change amount to add to mob's health points
+     */
     public void ChangeHealth(int change)
     {
         currentHealth += change;
     }
+    
+    // ====================================================
+    // Other Methods
+    // ====================================================
 
     public void AttackPlayer()
     {
+        gameManager.LogEvent(mobName + " hit you!");
         gameManager.HurtPlayer(attackDamage);
     }
 
-    // Uses a pathfinding algorithm to compute the shortest path from this to `destination`.
-    // The path is returned as a queue, where each item is a step in the path, and the first
-    // item out is the first step the mob needs to take.
-    private Queue<Vector2> ShortestPath(Vector2 destination)
-    {
-        // TODO: Implement
-        return null;
-    }
     public void moveToPlayer()
     {
         Vector2 playerPos = gameManager.GetPlayerPos();
@@ -107,8 +121,11 @@ public class Mob : MonoBehaviour
             _followCounter++;
     }
 
-    // is the player in sight?
-    public bool inSight()
+    /*
+     * Returns a boolean indicating whether the player is within `sightRadius`.
+     * \return is the player in sight?
+     */
+    public bool InSight()
     {
         Vector2 playerPos = gameManager.GetPlayerPos();
         Vector3 myPos = transform.position;
@@ -119,7 +136,9 @@ public class Mob : MonoBehaviour
                 (Mathf.Abs(checkY) <= sightRadius));
     }
 
-    // Move around randomly.
+    /*
+     * Mob behaviour logic: Move around randomly.
+     */
     public void Bumble()
     {
         if (gameManager.Dice.Roll(20, 1) > 14)
@@ -131,17 +150,20 @@ public class Mob : MonoBehaviour
         }
     }
 
-    // Determines and executes the mob's action this turn.
+    /*
+     * Determines and executes the mob's action this turn.
+     */
     public void MakeMove()
     {
         // First priority: attack the player if touching.
         if (gameManager.CanFight(this))
         {
             AttackPlayer();
+            print(mobName + " attacks player.");
             return;
         }
         // Second priority: Walk toward the player if they are in sight radius.
-        if (inSight() && (!tiresOut || _followCounter < followDistance))
+        if (InSight() && (!tiresOut || _followCounter < followDistance))
         {
             moveToPlayer();
             return;

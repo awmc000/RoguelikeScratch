@@ -340,9 +340,13 @@ public class Tree
         return _mapArray;
     }
 
-    // Returns a spot with a floor tile, where a player, mob, or item could be placed.
-    // Currently returns a 2-element array. A vector would be preferable, but this 
-    // needs to work outside the editor.
+    /*
+     * Returns a spot with a floor tile, where a player, mob, or item could be placed.
+     * Currently returns a 2-element array. A vector would be preferable, but this 
+     * needs to work outside the editor.
+     *
+     * \return `int[]` of length 2, where [0] is x coordinate, and [1] is y coordinate.
+     */
     public int[] GetEntitySpot()
     {
         Area room = _roomList[_random.Next(_roomList.Count)];

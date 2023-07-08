@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
      * Adds a turn counter to an event string before calling the EventLog's
      * method to log the event.
      */
-    private void LogEvent(string eventString)
+    public void LogEvent(string eventString)
     {
         eventLog.LogEvent("[" + _turnsPassed + "]: " + eventString);
     }
@@ -242,7 +242,6 @@ public class GameManager : MonoBehaviour
 
     public void HurtPlayer(int dice)
     {
-        LogEvent("A mob attacks you!");
         int roll = Dice.Roll(6, dice);
         LogEvent(dice + "D6 ROLL: " + roll);
         LogEvent("You lost " + roll + " hp!");
