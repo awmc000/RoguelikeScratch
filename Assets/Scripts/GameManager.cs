@@ -240,6 +240,11 @@ public class GameManager : MonoBehaviour
         return (xClose && yClose);
     }
 
+    /**
+     * Inflicts damage on the player for a `Mob`.
+     *
+     * \param dice The amount of d6 dice to roll for damage.
+     */
     public void HurtPlayer(int dice)
     {
         int roll = Dice.Roll(6, dice);
@@ -248,6 +253,12 @@ public class GameManager : MonoBehaviour
         player.ChangeHealth(-roll);
     }
 
+    /**
+     * Inflicts damage on a `Mob` for the player.
+     *
+     * \param target The mob to inflict damage upon
+     * \param dice The amount of d6 dice to roll for damage.
+     */
     public void HurtMob(Mob target, int dice)
     {
         LogEvent("You attack the " + target.mobName + "!");
@@ -348,6 +359,10 @@ public class GameManager : MonoBehaviour
         _turnsPassed++;
     }
 
+    /**
+     * Prints the message indicating that the player has died.
+     * Will be used for future death-related game logic.
+     */
     public void GameOver()
     {
         LogEvent("You died!");

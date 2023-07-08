@@ -17,9 +17,6 @@ public class LevelGenerator : MonoBehaviour
     public Tilemap floorMap;
     public Tilemap wallMap;
 
-    public Tile floorTile;
-    public Tile wallTile;
-
     public Tile[] floorTileTiers;
     public Tile[] wallTileTiers;
 

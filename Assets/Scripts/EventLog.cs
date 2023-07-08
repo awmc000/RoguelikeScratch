@@ -107,9 +107,7 @@ public class EventLog : MonoBehaviour
     {
         _writer.Close();
     }
-
-
-
+    
     void OnDestroy()
     {
         _writer.Close();
