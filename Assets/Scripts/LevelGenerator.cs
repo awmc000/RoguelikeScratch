@@ -26,6 +26,15 @@ public class LevelGenerator : MonoBehaviour
 
     public GameObject Mob;
     public List<GameObject> MobList;
+    
+    public List<GameObject> SurfaceMobs;
+    public List<GameObject> TopsoilMobs;
+    public GameObject TopsoilBoss;
+    public List<GameObject> DeepsoilMobs;
+    public GameObject DeepsoilBoss;
+    public List<GameObject> CavesMobs;
+    public GameObject BunkerBoss;
+    
     public  List<GameObject> InstantiatedMobsList = new List<GameObject>();
 
     // private members
@@ -83,7 +92,7 @@ public class LevelGenerator : MonoBehaviour
      * \param level An int in the range [1, 14].
      * \return `int` in the range [0, 4].
      */
-    private int GetLevelTier(int level)
+    public int GetLevelTier(int level)
     {
         if (level == 1)
         {

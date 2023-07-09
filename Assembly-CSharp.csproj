@@ -75,6 +75,7 @@
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Surface-Mobile.shader" />
      <Folder Include="Assets/TextMesh Pro" />
      <Folder Include="Assets/DawnLike" />
+     <Folder Include="Assets/Prefabs/Mobs" />
      <None Include="Assets/DawnLike/README.txt" />
      <Folder Include="Assets/DawnLike/Items" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Surface.shader" />

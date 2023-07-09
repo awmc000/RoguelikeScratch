@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -139,8 +140,34 @@ public class GameManager : MonoBehaviour
         int[] mobSpotArr = levelGenerator.BinaryTree.GetEntitySpot();
         Vector3 mobSpotVec = new Vector3(mobSpotArr[0] + 0.5f, mobSpotArr[1] + 0.5f, 0);
 
-        int whichMob = Dice.Roll(levelGenerator.MobList.Count(), 1) - 1;
-        GameObject mob = levelGenerator.MobList[whichMob];
+        List<GameObject> mobList = levelGenerator.SurfaceMobs;
+
+        int tier = levelGenerator.GetLevelTier(level);
+
+        switch (tier)
+        {
+            // Surface
+            case 0:
+                mobList = levelGenerator.SurfaceMobs;
+                break;
+
+            case 1:
+                mobList = levelGenerator.TopsoilMobs;
+                break;
+
+            case 2:
+                mobList = levelGenerator.DeepsoilMobs;
+                break;
+
+            case 3:
+            case 4:
+                mobList = levelGenerator.CavesMobs;
+                break;
+        }
+
+        int whichMob = Dice.Roll(mobList.Count(), 1) - 1;
+        GameObject mob = mobList[whichMob];
+        
         return Instantiate(mob, mobSpotVec, Quaternion.identity);
     }
 
