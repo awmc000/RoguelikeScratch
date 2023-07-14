@@ -159,6 +159,7 @@ MonoBehaviour:
   currentHealth: 250
   sightRadius: 8
   attackDamage: 4
+  canMove: 0
   tiresOut: 0
   followDistance: 30
   drop: {fileID: 0}
@@ -192,7 +193,7 @@ MonoBehaviour:
   - {x: 0.09718895, y: -0.27341866, z: 0}
   m_ShapePathHash: -384501593
   m_Mesh: {fileID: 0}
-  m_InstanceId: 45308
+  m_InstanceId: -1592
   m_LocalBounds:
     m_Center: {x: -0.031469345, y: 0.05035147, z: 0}
     m_Extent: {x: 0.4811182, y: 0.32377014, z: 0}

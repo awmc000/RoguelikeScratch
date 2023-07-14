@@ -77,6 +77,7 @@
      <Folder Include="Assets/DawnLike" />
      <Folder Include="Assets/Prefabs/Mobs" />
      <None Include="Assets/DawnLike/README.txt" />
+     <Folder Include="Assets/Animations" />
      <Folder Include="Assets/DawnLike/Items" />
      <None Include="Assets/TextMesh Pro/Shaders/TMP_SDF-Surface.shader" />
      <None Include="Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt" />

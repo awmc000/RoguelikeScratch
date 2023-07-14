@@ -176,13 +176,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 113ede311a6ad868e88b4a2912561c05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobName: Fly
-  maxHealth: 20
-  currentHealth: 20
-  sightRadius: 5
+  mobName: Golden Slug
+  maxHealth: 30
+  currentHealth: 30
+  sightRadius: 8
   attackDamage: 2
-  tiresOut: 0
-  followDistance: 0
+  canMove: 0
+  tiresOut: 1
+  followDistance: 30
   drop: {fileID: 0}
   lootMultiplier: 2
   gameManager: {fileID: 0}
@@ -214,7 +215,7 @@ MonoBehaviour:
   - {x: 0.09718895, y: -0.27341866, z: 0}
   m_ShapePathHash: -384501593
   m_Mesh: {fileID: 0}
-  m_InstanceId: 34338
+  m_InstanceId: -1776
   m_LocalBounds:
     m_Center: {x: -0.031469345, y: 0.05035147, z: 0}
     m_Extent: {x: 0.4811182, y: 0.32377014, z: 0}
