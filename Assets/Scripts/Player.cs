@@ -400,7 +400,7 @@ public class Player : MonoBehaviour
     {
         if (item.Stats.ContainsKey("hp"))
         {
-            _currentHealth = (_currentHealth + item.Stats["hp"]) % (maxHealth + 1);
+            _currentHealth += item.Stats["hp"] % ((maxHealth - _currentHealth) + 1);
             gameManager.eventLog.LogEvent("Restored " + item.Stats["hp"] + " hp.");
         }
 
