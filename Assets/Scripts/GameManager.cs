@@ -64,6 +64,8 @@ public class GameManager : MonoBehaviour
             _inventoryIconRects[i] = new Rect(200, 10 + (16 * i), 16, 16);
         }
         
+        _oldGameObjects = new List<GameObject>();
+
         mobsOnScreen = FindObjectsOfType<Mob>();
 
         LogEvent("The Burrow Tale begins.");
@@ -105,6 +107,10 @@ public class GameManager : MonoBehaviour
         // Get rid of old mobs
         for (int i = 0; i < levelGenerator.InstantiatedMobsList.Count(); i++)
             Destroy(levelGenerator.InstantiatedMobsList[i]);
+        
+        // Get rid of old `GameObject`s
+        foreach (GameObject obj in _oldGameObjects)
+            Destroy(obj);
         
         // Place gate to the next level
         _oldTunnel = tunnel;
@@ -295,7 +301,7 @@ public class GameManager : MonoBehaviour
         target.ChangeHealth(-roll);
         if (target.currentHealth <= 0)
         {
-            Instantiate(target.drop, target.transform.position, Quaternion.identity);
+            _oldGameObjects.Add(Instantiate(target.drop, target.transform.position, Quaternion.identity).gameObject);
             target.transform.gameObject.SetActive(false);
             int newMoney = Dice.Roll(6, target.lootMultiplier);
             player.money += newMoney;
