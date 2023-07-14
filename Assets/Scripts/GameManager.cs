@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public GameObject tunnel;
     private GameObject _oldTunnel;
 
+    public List<GameObject> _oldGameObjects;
+
     public LevelGenerator levelGenerator;
 
     public GameDice Dice;
