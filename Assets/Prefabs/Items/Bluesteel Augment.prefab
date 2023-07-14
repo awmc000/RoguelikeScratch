@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &7304422398734267754
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1170623989946707042, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: icon
+      value: 
+      objectReference: {fileID: 677563648, guid: 245a22fd03f852ea682fc384beac9453, type: 3}
+    - target: {fileID: 1170623989946707042, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: name
+      value: Micro-Carrot
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707042, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: itemName
+      value: Iron Augment
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707042, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: flagName1
+      value: edible
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707042, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: statName1
+      value: hp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707042, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: statName2
+      value: damage
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707042, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: statValue1
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707042, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: statValue2
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707042, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: description
+      value: Iron carapace armour.
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -53.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -35.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707043, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623989946707069, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_Name
+      value: Bluesteel Augment
+      objectReference: {fileID: 0}
+    - target: {fileID: 1170623990304921768, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 677563648, guid: 245a22fd03f852ea682fc384beac9453, type: 3}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 73c6e364c8ea80065a44046ecf92a77e, type: 3}
