@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour
 
         int whichMob = Dice.Roll(mobList.Count(), 1) - 1;
         GameObject mob = mobList[whichMob];
-        
+        mob.gameObject.GetComponent<Mob>().canMove = true;
         return Instantiate(mob, mobSpotVec, Quaternion.identity);
     }
 

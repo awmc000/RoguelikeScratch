@@ -15,6 +15,7 @@ public class Mob : MonoBehaviour
 
     // If `tiresOut` is true, the mob will follow the player for
     // followDistance steps before giving up.
+    public bool canMove = false;
     public bool tiresOut;
     public int followDistance;
     int _followCounter;
@@ -155,6 +156,8 @@ public class Mob : MonoBehaviour
      */
     public void MakeMove()
     {
+        if (!canMove)
+            return;
         // First priority: attack the player if touching.
         if (gameManager.CanFight(this))
         {
