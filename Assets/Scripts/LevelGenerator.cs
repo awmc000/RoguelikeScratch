@@ -157,13 +157,6 @@ public class LevelGenerator : MonoBehaviour
             }
         }
         
-        // Put a candle in each room
-        List<Area> candlePoints = BinaryTree.GetCandlePoints();
-        foreach (Area candlePoint in candlePoints)
-        {
-            GameObject.Instantiate(Candle, 
-                new Vector3(candlePoint.X + 0.5f, candlePoint.Y + 0.5f, 0), 
-                Quaternion.identity);
-        }
+        
     }
 }
