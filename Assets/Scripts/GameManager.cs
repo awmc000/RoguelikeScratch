@@ -122,11 +122,28 @@ public class GameManager : MonoBehaviour
         
         Destroy(_oldTunnel);
         
+        PlaceCandles();
+        
         // Place the player in a random location
         PlacePlayer();
 
         for (int i = 0; i < HowManyMobs(); i++)
             levelGenerator.InstantiatedMobsList.Add(CreateMob());
+    }
+
+    /**
+     * 
+     */
+    private void PlaceCandles()
+    {
+        // Put a candle in each room
+        List<Area> candlePoints = levelGenerator.BinaryTree.GetCandlePoints();
+        foreach (Area candlePoint in candlePoints)
+        {
+            _oldGameObjects.Add(GameObject.Instantiate(levelGenerator.Candle,
+                new Vector3(candlePoint.X + 0.5f, candlePoint.Y + 0.5f, 0),
+                Quaternion.identity));
+        }
     }
     
     /**
