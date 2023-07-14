@@ -23,7 +23,6 @@ public class LevelGenerator : MonoBehaviour
     public Tree BinaryTree = new Tree();
 
     public GameObject Candle;
-
     public GameObject Mob;
     public List<GameObject> MobList;
     
