@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour
 
     public GameDice Dice;
 
+
+    public string[] levelTierNames = {"Surface", "Topsoil", "Deepsoil",
+        "Caves", "Bunker"};
     [FormerlySerializedAs("Level")] public int level;
 
     private Texture2D MakeTex( int width, int height, Color col )
@@ -376,7 +379,8 @@ public class GameManager : MonoBehaviour
     void OnGUI()
     {
         GUI.Box(_labelRect, "Turn " + _turnsPassed + "; HP: " + player.GetHealth()
-            + "/" + player.maxHealth, _labelStyle);
+            + "/" + player.maxHealth + "; LEVEL " + level + ", " + 
+            levelTierNames[levelGenerator.GetLevelTier(level)], _labelStyle);
 
         if (player.inventoryOpen)
         {
