@@ -22,6 +22,10 @@ public class Mob : MonoBehaviour
     
     // Item drops
     public ItemPickup drop;
+    public int dropRate = 50;
+    
+    public ItemPickup rareDrop;
+    public int rareDropRate = 15;
     
     // Number of d6 rolled for gold drop.
     public int lootMultiplier;
