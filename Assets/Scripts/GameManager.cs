@@ -80,6 +80,11 @@ public class GameManager : MonoBehaviour
         CreateLevel();
     }
 
+    public int GetTurn()
+    {
+        return _turnsPassed;
+    }
+
     /**
      * Adds a turn counter to an event string before calling the EventLog's
      * method to log the event.
