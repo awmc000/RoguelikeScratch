@@ -392,7 +392,11 @@ public class Player : MonoBehaviour
         _targetPosition = transform.localPosition;
 
         if (advancedTurn)
+        {
             gameManager.FinishTurn();
+            if ((gameManager.GetTurn() % 5 == 0) && (_currentHealth < maxHealth))
+                _currentHealth++;
+        }
 
         yield return new WaitForSeconds(0.125f);
 
@@ -412,6 +416,13 @@ public class Player : MonoBehaviour
         {
             _currentHealth += item.Stats["hp"] % ((maxHealth - _currentHealth) + 1);
             gameManager.eventLog.LogEvent("Restored " + item.Stats["hp"] + " hp.");
+        }
+
+        if (item.Stats.ContainsKey("maxhp"))
+        {
+            maxHealth += item.Stats["maxhp"];
+            _currentHealth = maxHealth;
+            gameManager.eventLog.LogEvent("Increased max HP by " + item.Stats["maxhp"] + ".");
         }
 
         if (item.Stats.ContainsKey("dmg"))
