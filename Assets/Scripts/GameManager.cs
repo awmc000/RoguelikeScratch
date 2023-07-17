@@ -328,7 +328,11 @@ public class GameManager : MonoBehaviour
         target.ChangeHealth(-roll);
         if (target.currentHealth <= 0)
         {
-            _oldGameObjects.Add(Instantiate(target.drop, target.transform.position, Quaternion.identity).gameObject);
+            GameObject mobDrop = Instantiate(target.drop, target.transform.position, Quaternion.identity).gameObject;
+            
+            if (mobDrop != null)
+                _oldGameObjects.Add(mobDrop);
+            
             target.transform.gameObject.SetActive(false);
             int newMoney = Dice.Roll(6, target.lootMultiplier);
             player.money += newMoney;
