@@ -142,6 +142,24 @@ public class Mob : MonoBehaviour
     }
 
     /*
+     * Determines and returns the mob's drop for when they are killed.
+     */
+    public ItemPickup DropItem()
+    {
+        if (gameManager.Dice.Roll(100, 1) < rareDropRate)
+        {
+            return rareDrop;
+        }
+
+        if (gameManager.Dice.Roll(100, 1) < dropRate)
+        {
+            return drop;
+        }
+
+        return null;
+    }
+    
+    /*
      * Mob behaviour logic: Move around randomly.
      */
     public void Bumble()
