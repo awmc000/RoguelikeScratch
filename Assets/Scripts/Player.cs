@@ -210,6 +210,11 @@ public class Player : MonoBehaviour
                 hitEscapeLast = false;
             }
             
+            // god mdoe: boosts health and damage
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                StartCoroutine(DebounceCoroutine(KeyCode.M));
+            }
             // TODO: toggle "Look" mode
             /*
             if (Input.GetKeyDown(KeyCode.K))
@@ -349,6 +354,11 @@ public class Player : MonoBehaviour
                     Inventory.Remove(Inventory[selectedItem]);
                     selectedItem = 0;
                 }
+                break;
+            
+            // HEALTH AND DAMAGE CHEAT
+            case KeyCode.M:
+                _currentHealth = 10000;
                 break;
             
             case KeyCode.Escape:
