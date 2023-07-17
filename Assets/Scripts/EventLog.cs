@@ -22,6 +22,7 @@ public class EventLog : MonoBehaviour
     GUIStyle _labelStyle;
     public Font labelFont;
     private StreamWriter _writer;
+    private bool _logFileEnabled = false;
 
     // ====================================================
     // Event Methods
@@ -39,12 +40,21 @@ public class EventLog : MonoBehaviour
         _labelStyle.normal.textColor = Color.white;
         _labelStyle.normal.background = MakeTex( 2, 2, new Color( 0f, 0f, 0f, 0.5f ) );
 
-        // Set up the log text file
-        string path = Application.persistentDataPath + "/" + System.DateTime.Now.ToString() + " Log";
-        _writer = new StreamWriter(path);
-        LogEvent("File path for log is " + path);
-        _writer.WriteLine("Created StreamWriter.");
-        
+        try
+        {
+            // Set up the log text file
+            string path = Application.persistentDataPath + "/" + System.DateTime.Now.ToString() + " Log.txt";
+            _writer = new StreamWriter(path);
+            _logFileEnabled = true;
+            LogEvent("File path for log is " + path);
+            _writer.WriteLine("Created StreamWriter.");
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            LogEvent("Failed to write to a log file.");
+            _logFileEnabled = false;
+        }
+
         LogEvent("Set up the EventLog.");
     }
     
@@ -98,7 +108,8 @@ public class EventLog : MonoBehaviour
         _eventList.Add(eventString);
         
         // write to text file
-        _writer.WriteLine(eventString);
+        if (_logFileEnabled)
+            _writer.WriteLine(eventString);
         
         Debug.Log("Logged event: " + eventString);
     }
